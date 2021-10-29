@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "80392371814",
+    "project_id": "pln-bali-c4058",
+    "storage_bucket": "pln-bali-c4058.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:80392371814:android:9c322be7a181dbecfc77a7",
+        "android_client_info": {
+          "package_name": "com.reix19.pln_bali"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "80392371814-g0kkh275bgk1d8dt8uv37u3mkqcatu4s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.reix19.pln_bali",
+            "certificate_hash": "40f345e3cb05212fb1fb7b7abde6d568deb229f6"
+          }
+        },
+        {
+          "client_id": "80392371814-ha9g1f9e5ufvggjd8aieb882ssqr66oo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfgzEKsT2qx1uUFjWcYe1TeaAy6vKaa-0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "80392371814-ha9g1f9e5ufvggjd8aieb882ssqr66oo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
