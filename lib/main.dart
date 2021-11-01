@@ -19,8 +19,9 @@ class MyApp extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               print(snapshot.data);
+              print(snapshot.data.runtimeType);
               return HomePegawaiPage(
-                uid: snapshot.data!.uid,
+                user: snapshot.data!,
               );
             } else {
               return LoginPage();

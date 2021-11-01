@@ -14,8 +14,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePegawaiPage extends StatefulWidget {
-  final String uid;
-  const HomePegawaiPage({Key? key, required this.uid}) : super(key: key);
+  final User user;
+  const HomePegawaiPage({Key? key, required this.user}) : super(key: key);
 
   @override
   _HomePegawaiPageState createState() => _HomePegawaiPageState();
@@ -56,7 +56,7 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
 
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(widget.uid)
+        .doc(widget.user.uid)
         .get()
         .then((value) {
       if (value.exists) {
@@ -65,7 +65,7 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
           email = value.data()!['email'] ?? '';
           nomorHP = value.data()!['nomor_hp'] ?? '';
           urlFotoProfil = value.data()!['urlFotoProfil'] ?? '';
-          isVerified = value.data()!['isVerified'] ?? false;
+          isVerified = widget.user.emailVerified;
 
           print(nama);
           print(email);
@@ -353,7 +353,8 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                                         ),
                                       ),
                                       onTap: () async {
-                                        String _url = "https://web.pln.co.id/#";
+                                        if(!isLoading){}
+                                        String _url = "https://web.pln.co.id/";
                                         await canLaunch(_url)
                                             ? await launch(_url)
                                             : throw 'Could not launch $_url';
@@ -558,7 +559,7 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                               Text(
                                 "Terverifikasi",
                                 style: fontStyle1.copyWith(
-                                  color: Colors.greenAccent,
+                                  color: abuMuda,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12.sp,
                                 ),
@@ -569,7 +570,7 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                               Icon(
                                 FontAwesomeIcons.checkCircle,
                                 size: 12,
-                                color: Colors.greenAccent,
+                                color: abuMuda,
                               )
                             ],
                           )
@@ -603,7 +604,7 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                       context,
                       PageTransition(
                         child: EditProfilPegawaiPage(
-                          uid: widget.uid,
+                          user: widget.user,
                         ),
                         type: PageTransitionType.rightToLeft,
                       ),
@@ -625,6 +626,4 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
       ),
     );
   }
-
-  canLaunch(url) {}
 }
