@@ -16,8 +16,14 @@ class EditProfilPegawaiPage extends StatefulWidget {
 }
 
 class _EditProfilPegawaiPageState extends State<EditProfilPegawaiPage> {
+  //controller
+  TextEditingController _editingController = TextEditingController();
+
   //logic variable
   bool isLoading = false;
+  bool isEditNama = false;
+  bool isEditEmail = false;
+  bool isEditNomorHP = false;
 
   //data variable
   String? nama = '';
@@ -67,6 +73,25 @@ class _EditProfilPegawaiPageState extends State<EditProfilPegawaiPage> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  // snackBar Widget
+  tampilSnackBar(String? message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: abuTua,
+        content: Text(
+          '$message',
+          style: fontStyle1,
+        ),
+        duration: Duration(milliseconds: 2000),
+        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
   }
 
   @override
@@ -215,17 +240,68 @@ class _EditProfilPegawaiPageState extends State<EditProfilPegawaiPage> {
                   SizedBox(
                     height: 8.h,
                   ),
-                  buildDataPegawai(
-                    title: "Nama",
-                    value: nama!,
+                  AnimatedCrossFade(
+                    firstChild: buildDataPegawai(
+                      title: "Nama",
+                      value: nama!,
+                      onEdit: () async {
+                        setState(() {
+                          isEditNama = true;
+                        });
+                      },
+                    ),
+                    secondChild: editingWidget(
+                      label: "Edit Nama",
+                      fieldDB: "nama",
+                    ),
+                    crossFadeState: (!isEditNama)
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                    duration: Duration(
+                      milliseconds: 300,
+                    ),
                   ),
-                  buildDataPegawai(
-                    title: "Email",
-                    value: email!,
+                  AnimatedCrossFade(
+                    firstChild: buildDataPegawai(
+                      title: "Email",
+                      value: email!,
+                      onEdit: () async {
+                        setState(() {
+                          isEditEmail = true;
+                        });
+                      },
+                    ),
+                    secondChild: editingWidget(
+                      label: "Edit Email",
+                      fieldDB: "email",
+                    ),
+                    crossFadeState: (!isEditEmail)
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                    duration: Duration(
+                      milliseconds: 300,
+                    ),
                   ),
-                  buildDataPegawai(
-                    title: "Nomor HP",
-                    value: nomorHP!,
+                  AnimatedCrossFade(
+                    firstChild: buildDataPegawai(
+                      title: "Nomor HP",
+                      value: nomorHP!,
+                      onEdit: () async {
+                        setState(() {
+                          isEditNomorHP = true;
+                        });
+                      },
+                    ),
+                    secondChild: editingWidget(
+                      label: "Edit Nomor HP",
+                      fieldDB: "nomorHP",
+                    ),
+                    crossFadeState: (!isEditNomorHP)
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                    duration: Duration(
+                      milliseconds: 300,
+                    ),
                   ),
                   buildDataPegawai(
                     title: "ID Koordinator",
@@ -240,8 +316,146 @@ class _EditProfilPegawaiPageState extends State<EditProfilPegawaiPage> {
     );
   }
 
+  Widget editingWidget({required String label, required String fieldDB}) {
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      elevation: 3,
+      shadowColor: abuMuda,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Container(
+              margin: EdgeInsets.only(bottom: 8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+              ),
+              child: TextField(
+                controller: _editingController,
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: abuMuda,
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(12))),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: abuMuda,
+                        width: 2,
+                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(12))),
+                  labelText: label,
+                  labelStyle: fontStyle1.copyWith(color: abuMuda),
+                ),
+                keyboardType: TextInputType.text,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Material(
+                  color: abuMuda,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () {
+                        FocusScopeNode currentFocus = FocusScope.of(context);
+
+                        setState(() {
+                          if (fieldDB == "nama") {
+                            isEditNama = false;
+                          } else if (fieldDB == "email") {
+                            isEditEmail = false;
+                          } else if (fieldDB == "nomorHP") {
+                            isEditNomorHP = false;
+                          }
+                        });
+
+                        if (!currentFocus.hasPrimaryFocus) {
+                          currentFocus.unfocus();
+                        }
+
+                        _editingController.clear();
+                      },
+                      child: Icon(
+                        FontAwesomeIcons.times,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 12.h,
+                ),
+                Material(
+                  color: abuMuda,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () async {
+                        if (_editingController.text.isEmpty) {
+                          tampilSnackBar("Data masih kosong. Silahkan isi.");
+                        } else {
+                          FocusScopeNode currentFocus = FocusScope.of(context);
+
+                          //Update name in database
+                          await FirebaseFirestore.instance
+                              .collection('users')
+                              .doc(widget.user.uid)
+                              .update({
+                            "$fieldDB": "${_editingController.text.trim()}"
+                          }).then((value) {
+                            tampilSnackBar("Nama telah dirubah");
+                          });
+
+
+                          setState(() {
+                            if (fieldDB == "nama") {
+                              isEditNama = false;
+                            } else if (fieldDB == "email") {
+                              isEditEmail = false;
+                            } else if (fieldDB == "nomorHP") {
+                              isEditNomorHP = false;
+                            }
+                          });
+
+                          if (!currentFocus.hasPrimaryFocus) {
+                            currentFocus.unfocus();
+                          }
+
+                          _editingController.clear();
+
+                          getDataUser();
+                        }
+                      },
+                      child: Icon(
+                        FontAwesomeIcons.check,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget buildDataPegawai(
-      {required String title, required String value, VoidCallback? onEdit}) {
+      {required String title,
+      required String value,
+      VoidCallback? onEdit,
+      IconData? iconData}) {
     return Padding(
       padding: const EdgeInsets.only(
         bottom: 8,
@@ -297,7 +511,7 @@ class _EditProfilPegawaiPageState extends State<EditProfilPegawaiPage> {
                       child: IconButton(
                         onPressed: onEdit,
                         icon: Icon(
-                          FontAwesomeIcons.plusCircle,
+                          iconData ?? FontAwesomeIcons.edit,
                           color: Colors.white,
                         ),
                       ),

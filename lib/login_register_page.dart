@@ -26,6 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isVisiblePass = false;
   bool isLoginPage = true;
   bool isLoading = false;
+  bool isPegawai = true;
 
   @override
   void initState() {
@@ -209,9 +210,8 @@ class _LoginPageState extends State<LoginPage> {
                   });
 
                   try {
-                    await FirebaseAuth.instance
-                        .signInWithEmailAndPassword(
-                            email: "$email", password: "$password");
+                    await FirebaseAuth.instance.signInWithEmailAndPassword(
+                        email: "$email", password: "$password");
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'user-not-found') {
                       tampilSnackBar("Akun tidak ditemukan. Silahkan daftar.");
@@ -270,7 +270,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget registerWidget() {
     return AnimatedContainer(
-      height: (!isLoginPage) ? 0.7.sh : 0.sh,
+      height: (!isLoginPage) ? 0.75.sh : 0.sh,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.only(
@@ -280,7 +280,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       duration: Duration(milliseconds: 500),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
         child: ListView(
           children: [
             Row(
@@ -310,8 +310,86 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ],
             ),
-            SizedBox(
-              height: 16.h,
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Role",
+                    style: fontStyle1.copyWith(color: abuMuda),
+                  ),
+                  SizedBox(
+                    height: 4,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              isPegawai = true;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: (isPegawai) ? abuTua : Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: abuMuda,
+                                width: 1.4,
+                              ),
+                            ),
+                            child: Center(
+                                child: Text(
+                              "Pegawai",
+                              style: fontStyle2.copyWith(
+                                color: (isPegawai) ? Colors.white : abuTua,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 12.w,
+                      ),
+                      Expanded(
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              isPegawai = false;
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: (!isPegawai) ? abuTua : Colors.white,
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color: abuMuda,
+                                width: 1.4,
+                              ),
+                            ),
+                            child: Center(
+                                child: Text(
+                              "Pegawai",
+                              style: fontStyle2.copyWith(
+                                color: (!isPegawai) ? Colors.white : abuTua,
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
             Container(
               decoration: BoxDecoration(
@@ -484,9 +562,12 @@ class _LoginPageState extends State<LoginPage> {
 
                     String uidUser = userCredential.user!.uid;
 
+                    String roleUser = (isPegawai) ? "Pegawai" : "Koordinator";
+
                     Map<String, dynamic> dataUser = {
                       "nama": nama,
                       "email": email,
+                      "roleUser": roleUser,
                     };
 
                     await FirebaseFirestore.instance
