@@ -375,14 +375,15 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             child: Center(
-                                child: Text(
-                              "Pegawai",
-                              style: fontStyle2.copyWith(
-                                color: (!isPegawai) ? Colors.white : abuTua,
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.bold,
+                              child: Text(
+                                "Koordinator",
+                                style: fontStyle2.copyWith(
+                                  color: (!isPegawai) ? Colors.white : abuTua,
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            )),
+                            ),
                           ),
                         ),
                       ),
