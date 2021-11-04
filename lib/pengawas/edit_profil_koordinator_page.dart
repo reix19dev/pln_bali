@@ -303,10 +303,7 @@ class _EditProfilKoordinatorPageState extends State<EditProfilKoordinatorPage> {
                       milliseconds: 300,
                     ),
                   ),
-                  buildDataPegawai(
-                    title: "ID Koordinator",
-                    value: koorID!,
-                  ),
+                  
                 ],
               ),
             ],

@@ -8,6 +8,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pln_bali/pegawai/edit_profil_pegawai_page.dart';
+import 'package:pln_bali/pengawas/edit_profil_koordinator_page.dart';
+import 'package:pln_bali/pengawas/list_pegawai_page.dart';
 import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 import 'package:shimmer/shimmer.dart';
@@ -277,10 +279,18 @@ class _HomeKoordinatorPageState extends State<HomeKoordinatorPage> {
                                   iconData: FontAwesomeIcons.tv,
                                 ),
                                 menuItemWidget(
-                                  namaMenu: "Data Pegawai",
-                                  iconData: FontAwesomeIcons.list,
-                                ),
-                                
+                                    namaMenu: "List Pegawai",
+                                    iconData: FontAwesomeIcons.list,
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              child: ListPegawaiPage(
+                                                user: widget.user,
+                                              ),
+                                              type: PageTransitionType
+                                                  .rightToLeft));
+                                    }),
                               ],
                             ),
                           ),
@@ -346,7 +356,7 @@ class _HomeKoordinatorPageState extends State<HomeKoordinatorPage> {
                                         ),
                                       ),
                                       onTap: () async {
-                                        if(!isLoading){}
+                                        if (!isLoading) {}
                                         String _url = "https://web.pln.co.id/";
                                         await canLaunch(_url)
                                             ? await launch(_url)
@@ -384,42 +394,47 @@ class _HomeKoordinatorPageState extends State<HomeKoordinatorPage> {
   }
 
   Widget menuItemWidget(
-      {required String namaMenu, required IconData iconData}) {
-    return Card(
-      shadowColor: abuMuda,
-      elevation: 3,
-      borderOnForeground: false,
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Container(
-        width: 100,
-        padding: EdgeInsets.all(12),
-        decoration: BoxDecoration(
-            color: abuMuda, borderRadius: BorderRadius.circular(8)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Icon(
-              iconData,
-              color: Colors.white,
-              size: 32.h,
-            ),
-            SizedBox(
-              height: 8.h,
-            ),
-            Text(
-              "$namaMenu",
-              style: fontStyle1.copyWith(
-                fontSize: 12.sp,
-                fontWeight: FontWeight.bold,
+      {required String namaMenu,
+      required IconData iconData,
+      VoidCallback? onPressed}) {
+    return InkWell(
+      child: Card(
+        shadowColor: abuMuda,
+        elevation: 3,
+        borderOnForeground: false,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Container(
+          width: 100,
+          padding: EdgeInsets.all(12),
+          decoration: BoxDecoration(
+              color: abuMuda, borderRadius: BorderRadius.circular(8)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(
+                iconData,
+                color: Colors.white,
+                size: 32.h,
               ),
-              textAlign: TextAlign.center,
-            )
-          ],
+              SizedBox(
+                height: 8.h,
+              ),
+              Text(
+                "$namaMenu",
+                style: fontStyle1.copyWith(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              )
+            ],
+          ),
         ),
       ),
+      onTap: onPressed,
     );
   }
 
@@ -596,7 +611,7 @@ class _HomeKoordinatorPageState extends State<HomeKoordinatorPage> {
                     Navigator.push(
                       context,
                       PageTransition(
-                        child: EditProfilPegawaiPage(
+                        child: EditProfilKoordinatorPage(
                           user: widget.user,
                         ),
                         type: PageTransitionType.rightToLeft,

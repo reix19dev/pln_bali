@@ -19,41 +19,42 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              print(snapshot.data);
-              print(snapshot.data.runtimeType);
-              User? user = snapshot.data;
-              return StreamBuilder<DocumentSnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection("users")
-                    .doc(user!.uid)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return ErrorPage();
-                  }
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            print(snapshot.data);
+            print(snapshot.data.runtimeType);
+            User? user = snapshot.data;
+            return StreamBuilder<DocumentSnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(user!.uid)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return ErrorPage();
+                }
 
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return LoadingPage();
-                  }
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return LoadingPage();
+                }
 
-                  if (snapshot.data!.get("roleUser") == "Pegawai") {
-                    return HomePegawaiPage(
-                      user: user,
-                    );
-                  } else {
-                    return HomeKoordinatorPage(
-                      user: user,
-                    );
-                  }
-                },
-              );
-            } else {
-              return LoginPage();
-            }
-          }),
+                if (snapshot.data!.get("roleUser") == "Pegawai") {
+                  return HomePegawaiPage(
+                    user: user,
+                  );
+                } else {
+                  return HomeKoordinatorPage(
+                    user: user,
+                  );
+                }
+              },
+            );
+          } else {
+            return LoginPage();
+          }
+        },
+      ),
     );
   }
 }

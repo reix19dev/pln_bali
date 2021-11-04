@@ -275,6 +275,48 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                                 menuItemWidget(
                                   namaMenu: "Checkin Penugasan",
                                   iconData: FontAwesomeIcons.userCheck,
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          clipBehavior: Clip.none,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                          content: Text(
+                                            "Terimakasih telah melakukan check in. Silahkan menginput data penugasan.",
+                                            style: fontStyle1.copyWith(
+                                              color: abuMuda,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            textAlign: TextAlign.justify,
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: Container(
+                                                padding: EdgeInsets.all(8),
+                                                decoration: BoxDecoration(
+                                                    color: abuMuda,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            8)),
+                                                child: Text(
+                                                  "OK",
+                                                  style: fontStyle1.copyWith(
+                                                      color: Colors.white),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
                                 ),
                                 menuItemWidget(
                                   namaMenu: "Input Data Penugasan",
@@ -353,7 +395,7 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                                         ),
                                       ),
                                       onTap: () async {
-                                        if(!isLoading){}
+                                        if (!isLoading) {}
                                         String _url = "https://web.pln.co.id/";
                                         await canLaunch(_url)
                                             ? await launch(_url)
@@ -391,42 +433,47 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
   }
 
   Widget menuItemWidget(
-      {required String namaMenu, required IconData iconData}) {
-    return Card(
-      shadowColor: abuMuda,
-      elevation: 3,
-      borderOnForeground: false,
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Container(
-        width: 100,
-        padding: EdgeInsets.all(12),
-        decoration: BoxDecoration(
-            color: abuMuda, borderRadius: BorderRadius.circular(8)),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Icon(
-              iconData,
-              color: Colors.white,
-              size: 32.h,
-            ),
-            SizedBox(
-              height: 8.h,
-            ),
-            Text(
-              "$namaMenu",
-              style: fontStyle1.copyWith(
-                fontSize: 12.sp,
-                fontWeight: FontWeight.bold,
+      {required String namaMenu,
+      required IconData iconData,
+      VoidCallback? onPressed}) {
+    return InkWell(
+      child: Card(
+        shadowColor: abuMuda,
+        elevation: 3,
+        borderOnForeground: false,
+        clipBehavior: Clip.antiAlias,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Container(
+          width: 100,
+          padding: EdgeInsets.all(12),
+          decoration: BoxDecoration(
+              color: abuMuda, borderRadius: BorderRadius.circular(8)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(
+                iconData,
+                color: Colors.white,
+                size: 32.h,
               ),
-              textAlign: TextAlign.center,
-            )
-          ],
+              SizedBox(
+                height: 8.h,
+              ),
+              Text(
+                "$namaMenu",
+                style: fontStyle1.copyWith(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              )
+            ],
+          ),
         ),
       ),
+      onTap: onPressed,
     );
   }
 
