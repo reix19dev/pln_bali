@@ -210,8 +210,13 @@ class _LoginPageState extends State<LoginPage> {
                   });
 
                   try {
-                    await FirebaseAuth.instance.signInWithEmailAndPassword(
-                        email: "$email", password: "$password");
+                    UserCredential userCredential = await FirebaseAuth.instance
+                        .signInWithEmailAndPassword(
+                            email: "$email", password: "$password");
+
+                    if (!userCredential.user!.emailVerified) {
+                      await userCredential.user!.sendEmailVerification();
+                    }
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'user-not-found') {
                       tampilSnackBar("Akun tidak ditemukan. Silahkan daftar.");
@@ -219,6 +224,9 @@ class _LoginPageState extends State<LoginPage> {
                       tampilSnackBar("Password anda salah. Coba lagi.");
                     }
                   }
+
+                  _emailController.clear();
+                  _passwordController.clear();
 
                   setState(() {
                     isLoading = false;
@@ -578,6 +586,10 @@ class _LoginPageState extends State<LoginPage> {
                         .then((value) {
                       tampilSnackBar("Akun berhasil dibuat.");
                     });
+
+                    if (!userCredential.user!.emailVerified) {
+                      await userCredential.user!.sendEmailVerification();
+                    }
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'email-already-in-use') {
                       tampilSnackBar("Email yang ada gunakan telah terdaftar.");
@@ -585,6 +597,11 @@ class _LoginPageState extends State<LoginPage> {
                   } catch (e) {
                     print(e);
                   }
+
+                  _namaController.clear();
+                  _emailController.clear();
+                  _passwordController.clear();
+                  _valPasswordController.clear();
 
                   setState(() {
                     isLoading = false;

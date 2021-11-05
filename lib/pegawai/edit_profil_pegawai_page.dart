@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:pln_bali/email_verification_page.dart';
 import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 import 'package:shimmer/shimmer.dart';
@@ -412,10 +414,27 @@ class _EditProfilPegawaiPageState extends State<EditProfilPegawaiPage> {
                               .doc(widget.user.uid)
                               .update({
                             "$fieldDB": "${_editingController.text.trim()}"
-                          }).then((value) {
-                            tampilSnackBar("Nama telah dirubah");
                           });
 
+                          //UpdateEmail in account
+                          if (fieldDB == "email") {
+                            print("testing");
+                            try {
+                              await widget.user
+                                  .updateEmail(_editingController.text.trim());
+
+                              if (!widget.user.emailVerified) {
+                                await widget.user.sendEmailVerification();
+                              }
+                            } on FirebaseAuthException catch (e) {
+                              if (e.code == 'email-already-in-use') {
+                                tampilSnackBar(
+                                    "Email yang tersebut telah digunakan.");
+                              } else if (e.code == 'requires-recent-login') {
+                                tampilSnackBar("User membutuhkan login ulang");
+                              }
+                            }
+                          }
 
                           setState(() {
                             if (fieldDB == "nama") {

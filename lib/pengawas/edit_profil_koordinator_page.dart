@@ -3,16 +3,20 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:pln_bali/email_verification_page.dart';
 import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 import 'package:shimmer/shimmer.dart';
 
 class EditProfilKoordinatorPage extends StatefulWidget {
   final User user;
-  const EditProfilKoordinatorPage({Key? key, required this.user}) : super(key: key);
+  const EditProfilKoordinatorPage({Key? key, required this.user})
+      : super(key: key);
 
   @override
-  _EditProfilKoordinatorPageState createState() => _EditProfilKoordinatorPageState();
+  _EditProfilKoordinatorPageState createState() =>
+      _EditProfilKoordinatorPageState();
 }
 
 class _EditProfilKoordinatorPageState extends State<EditProfilKoordinatorPage> {
@@ -303,7 +307,6 @@ class _EditProfilKoordinatorPageState extends State<EditProfilKoordinatorPage> {
                       milliseconds: 300,
                     ),
                   ),
-                  
                 ],
               ),
             ],
@@ -403,16 +406,22 @@ class _EditProfilKoordinatorPageState extends State<EditProfilKoordinatorPage> {
                         } else {
                           FocusScopeNode currentFocus = FocusScope.of(context);
 
-                          //Update name in database
+                          //UpdateEmail in account
+                          if (fieldDB == "email") {
+                            print("testing");
+                            await widget.user
+                                .updateEmail(_editingController.text.trim());
+                          }
+
+                          //Update data in database
                           await FirebaseFirestore.instance
                               .collection('users')
                               .doc(widget.user.uid)
                               .update({
                             "$fieldDB": "${_editingController.text.trim()}"
                           }).then((value) {
-                            tampilSnackBar("Nama telah dirubah");
+                            tampilSnackBar("Data telah dirubah");
                           });
-
 
                           setState(() {
                             if (fieldDB == "nama") {
