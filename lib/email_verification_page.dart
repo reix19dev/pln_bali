@@ -5,7 +5,8 @@ import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 
 class EmailVerificationPage extends StatefulWidget {
-  const EmailVerificationPage({Key? key}) : super(key: key);
+  final User user;
+  const EmailVerificationPage({Key? key, required this.user}) : super(key: key);
 
   @override
   _EmailVerificationPageState createState() => _EmailVerificationPageState();
@@ -56,7 +57,7 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      "Silahkan cek email anda untuk verifikasi user. Kemudian tekan tombol dibawah ini jika sudah verifikasi melalui email.",
+                      "Email belum diverifikasi. Tekan tombol dibawah ini jika sudah verifikasi melalui email.",
                       style: fontStyle1.copyWith(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -67,7 +68,22 @@ class _EmailVerificationPageState extends State<EmailVerificationPage> {
                   ElevatedButton(
                     onPressed: () async {
                       //Back to login page
-                      await FirebaseAuth.instance.signOut();
+                      if (!widget.user.emailVerified) {
+                        await widget.user.sendEmailVerification();
+                        tampilSnackBar("Email verifikasi telah dikirimkan.");
+                      }
+                    },
+                    child: Text(
+                      "Kirim Email Verifikasi",
+                      style: fontStyle1.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    onPressed: () async {
+                      //Back to login page
+                      await widget.user.reload().then((value) {});
                     },
                     child: Text(
                       "Sudah Verifikasi",

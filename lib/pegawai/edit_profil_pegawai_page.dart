@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pln_bali/email_verification_page.dart';
+import 'package:pln_bali/reauthenticated_user.dart';
 import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 import 'package:shimmer/shimmer.dart';
@@ -32,7 +33,7 @@ class _EditProfilPegawaiPageState extends State<EditProfilPegawaiPage> {
   String? email = '';
   String? nomorHP = '';
   String? urlFotoProfil = '';
-  String? koorID = '';
+  String? idKoor = '';
   bool isVerified = false;
 
   List<String> imgList = [];
@@ -64,6 +65,7 @@ class _EditProfilPegawaiPageState extends State<EditProfilPegawaiPage> {
           email = value.data()!['email'] ?? '';
           nomorHP = value.data()!['nomorHP'] ?? '';
           urlFotoProfil = value.data()!['urlFotoProfil'] ?? '';
+          idKoor = value.data()!['idKoor'] ?? '';
           isVerified = widget.user.emailVerified;
 
           print(nama);
@@ -307,7 +309,7 @@ class _EditProfilPegawaiPageState extends State<EditProfilPegawaiPage> {
                   ),
                   buildDataPegawai(
                     title: "ID Koordinator",
-                    value: koorID!,
+                    value: idKoor!,
                   ),
                 ],
               ),
@@ -408,24 +410,36 @@ class _EditProfilPegawaiPageState extends State<EditProfilPegawaiPage> {
                         } else {
                           FocusScopeNode currentFocus = FocusScope.of(context);
 
-                          //Update name in database
-                          await FirebaseFirestore.instance
-                              .collection('users')
-                              .doc(widget.user.uid)
-                              .update({
-                            "$fieldDB": "${_editingController.text.trim()}"
-                          });
-
                           //UpdateEmail in account
                           if (fieldDB == "email") {
-                            print("testing");
                             try {
-                              await widget.user
-                                  .updateEmail(_editingController.text.trim());
+                              var credential = await Navigator.push(
+                                context,
+                                PageTransition(
+                                  child: ReauthenticatedUser(),
+                                  type: PageTransitionType.rightToLeft,
+                                ),
+                              );
 
-                              if (!widget.user.emailVerified) {
-                                await widget.user.sendEmailVerification();
-                              }
+                              print("====Testing====");
+                              print(credential);
+                              print("====Testing====");
+
+                              await widget.user
+                                  .reauthenticateWithCredential(credential)
+                                  .then((value) async {
+                                await widget.user
+                                    .updateEmail(_editingController.text.trim())
+                                    .then((value) async {
+                                  await FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(widget.user.uid)
+                                      .update({
+                                    "$fieldDB":
+                                        "${_editingController.text.trim()}"
+                                  });
+                                });
+                              });
                             } on FirebaseAuthException catch (e) {
                               if (e.code == 'email-already-in-use') {
                                 tampilSnackBar(
@@ -434,6 +448,14 @@ class _EditProfilPegawaiPageState extends State<EditProfilPegawaiPage> {
                                 tampilSnackBar("User membutuhkan login ulang");
                               }
                             }
+                          } else {
+                            //Update name in database
+                            await FirebaseFirestore.instance
+                                .collection('users')
+                                .doc(widget.user.uid)
+                                .update({
+                              "$fieldDB": "${_editingController.text.trim()}"
+                            });
                           }
 
                           setState(() {

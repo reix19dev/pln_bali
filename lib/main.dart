@@ -20,14 +20,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
+        stream: FirebaseAuth.instance.userChanges(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             //initial user data.
             User user = snapshot.data!;
 
             if (!user.emailVerified) {
-              return EmailVerificationPage();
+              return EmailVerificationPage(
+                user:  user,
+              );
             } else {
               return StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseFirestore.instance
