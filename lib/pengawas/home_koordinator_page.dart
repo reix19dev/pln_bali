@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:pln_bali/pegawai/edit_profil_pegawai_page.dart';
 import 'package:pln_bali/pengawas/edit_profil_koordinator_page.dart';
 import 'package:pln_bali/pengawas/list_pegawai_page.dart';
 import 'package:pln_bali/utils/colors.dart';

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:pln_bali/pegawai/form_foto_lokasi.dart';
 import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 
@@ -12,18 +14,20 @@ class FormDataPenugasan extends StatefulWidget {
   _FormDataPenugasanState createState() => _FormDataPenugasanState();
 }
 
-TextEditingController _namaController = TextEditingController();
-TextEditingController _nomorWAController = TextEditingController();
-TextEditingController _idController = TextEditingController();
-TextEditingController _alamatController = TextEditingController();
-TextEditingController _nomorMeterController = TextEditingController();
-TextEditingController _garduTiangController = TextEditingController();
-TextEditingController _tarifDayaController = TextEditingController();
-TextEditingController _kodeKedudukanController = TextEditingController();
-TextEditingController _biayaRekeningController = TextEditingController();
-TextEditingController _biayaKeterlambatanController = TextEditingController();
-
 class _FormDataPenugasanState extends State<FormDataPenugasan> {
+  TextEditingController _namaController = TextEditingController();
+  TextEditingController _nomorWAController = TextEditingController();
+  TextEditingController _idController = TextEditingController();
+  TextEditingController _alamatController = TextEditingController();
+  TextEditingController _nomorMeterController = TextEditingController();
+  TextEditingController _garduTiangController = TextEditingController();
+  TextEditingController _taripDayaController = TextEditingController();
+  TextEditingController _kodeKedudukanController = TextEditingController();
+  TextEditingController _biayaRekeningController = TextEditingController();
+  TextEditingController _biayaKeterlambatanController = TextEditingController();
+
+  int jumlahTunggakan = 0;
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(
@@ -104,12 +108,12 @@ class _FormDataPenugasanState extends State<FormDataPenugasan> {
                     hintStyle: fontStyle1.copyWith(
                         color: abuMuda.withOpacity(0.5), fontSize: 16),
                     prefixIcon: Icon(
-                      FontAwesomeIcons.lock,
+                      FontAwesomeIcons.phone,
                       size: 16,
                       color: abuMuda,
                     ),
                   ),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.phone,
                 ),
               ),
               SizedBox(
@@ -135,7 +139,7 @@ class _FormDataPenugasanState extends State<FormDataPenugasan> {
                     hintStyle: fontStyle1.copyWith(
                         color: abuMuda.withOpacity(0.5), fontSize: 16),
                     prefixIcon: Icon(
-                      FontAwesomeIcons.lock,
+                      FontAwesomeIcons.idCard,
                       size: 16,
                       color: abuMuda,
                     ),
@@ -166,7 +170,7 @@ class _FormDataPenugasanState extends State<FormDataPenugasan> {
                     hintStyle: fontStyle1.copyWith(
                         color: abuMuda.withOpacity(0.5), fontSize: 16),
                     prefixIcon: Icon(
-                      FontAwesomeIcons.lock,
+                      FontAwesomeIcons.addressCard,
                       size: 16,
                       color: abuMuda,
                     ),
@@ -197,7 +201,7 @@ class _FormDataPenugasanState extends State<FormDataPenugasan> {
                     hintStyle: fontStyle1.copyWith(
                         color: abuMuda.withOpacity(0.5), fontSize: 16),
                     prefixIcon: Icon(
-                      FontAwesomeIcons.lock,
+                      FontAwesomeIcons.tachometerAlt,
                       size: 16,
                       color: abuMuda,
                     ),
@@ -228,12 +232,12 @@ class _FormDataPenugasanState extends State<FormDataPenugasan> {
                     hintStyle: fontStyle1.copyWith(
                         color: abuMuda.withOpacity(0.5), fontSize: 16),
                     prefixIcon: Icon(
-                      FontAwesomeIcons.lock,
+                      FontAwesomeIcons.chargingStation,
                       size: 16,
                       color: abuMuda,
                     ),
                   ),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                 ),
               ),
               SizedBox(
@@ -244,7 +248,7 @@ class _FormDataPenugasanState extends State<FormDataPenugasan> {
                   color: Colors.white,
                 ),
                 child: TextField(
-                  controller: _tarifDayaController,
+                  controller: _taripDayaController,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     focusedBorder: OutlineInputBorder(
@@ -259,12 +263,12 @@ class _FormDataPenugasanState extends State<FormDataPenugasan> {
                     hintStyle: fontStyle1.copyWith(
                         color: abuMuda.withOpacity(0.5), fontSize: 16),
                     prefixIcon: Icon(
-                      FontAwesomeIcons.lock,
+                      FontAwesomeIcons.bolt,
                       size: 16,
                       color: abuMuda,
                     ),
                   ),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                 ),
               ),
               SizedBox(
@@ -290,12 +294,12 @@ class _FormDataPenugasanState extends State<FormDataPenugasan> {
                     hintStyle: fontStyle1.copyWith(
                         color: abuMuda.withOpacity(0.5), fontSize: 16),
                     prefixIcon: Icon(
-                      FontAwesomeIcons.lock,
+                      FontAwesomeIcons.mapPin,
                       size: 16,
                       color: abuMuda,
                     ),
                   ),
-                  keyboardType: TextInputType.number,
+                  keyboardType: TextInputType.text,
                 ),
               ),
               SizedBox(
@@ -321,24 +325,159 @@ class _FormDataPenugasanState extends State<FormDataPenugasan> {
                     hintStyle: fontStyle1.copyWith(
                         color: abuMuda.withOpacity(0.5), fontSize: 16),
                     prefixIcon: Icon(
-                      FontAwesomeIcons.lock,
+                      FontAwesomeIcons.moneyBillAlt,
                       size: 16,
                       color: abuMuda,
                     ),
                   ),
                   keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    String biayaKeterlambatan =
+                        _biayaKeterlambatanController.text.isNotEmpty
+                            ? _biayaKeterlambatanController.text
+                            : "0";
+
+                    if (value.isNotEmpty) {
+                      setState(() {
+                        jumlahTunggakan =
+                            int.parse(value) + int.parse(biayaKeterlambatan);
+                      });
+                    } else {
+                      jumlahTunggakan = int.parse(biayaKeterlambatan);
+                    }
+                    print(jumlahTunggakan);
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 16.h,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: TextField(
+                  controller: _biayaKeterlambatanController,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: abuMuda),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: abuMuda),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    labelText: "Biaya Keterlambatan",
+                    labelStyle: fontStyle1.copyWith(color: abuMuda),
+                    hintText: "100000",
+                    hintStyle: fontStyle1.copyWith(
+                        color: abuMuda.withOpacity(0.5), fontSize: 16),
+                    prefixIcon: Icon(
+                      FontAwesomeIcons.moneyCheckAlt,
+                      size: 16,
+                      color: abuMuda,
+                    ),
+                  ),
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    String biayaRekening =
+                        _biayaRekeningController.text.isNotEmpty
+                            ? _biayaRekeningController.text
+                            : "0";
+
+                    if (value.isNotEmpty) {
+                      setState(() {
+                        jumlahTunggakan =
+                            int.parse(value) + int.parse(biayaRekening);
+                      });
+                    } else {
+                      jumlahTunggakan = int.parse(biayaRekening);
+                    }
+                    print(jumlahTunggakan);
+                  },
+                ),
+              ),
+              SizedBox(
+                height: 16.h,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Jumlah Tunggakan : ",
+                      style: fontStyle1.copyWith(
+                        color: abuMuda,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      NumberFormat.currency(locale: "id", symbol: "Rp ")
+                          .format(jumlahTunggakan),
+                      style: fontStyle1.copyWith(
+                        color: abuTua,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20.sp,
+                      ),
+                    )
+                  ],
                 ),
               ),
               SizedBox(
                 height: 16.h,
               ),
               ElevatedButton(
-                onPressed: () async {},
+                onPressed: () async {
+                  String nama = _namaController.text;
+                  String nomorWA = _nomorWAController.text;
+                  String id = _idController.text;
+                  String alamat = _alamatController.text;
+                  String nomorMeter = _nomorMeterController.text;
+                  String garduTiang = _garduTiangController.text;
+                  String taripDaya = _taripDayaController.text;
+                  String kodeKedudukan = _kodeKedudukanController.text;
+                  int biayaRekening = int.parse(
+                      _biayaRekeningController.text.isNotEmpty
+                          ? _biayaRekeningController.text
+                          : "0");
+                  int biayaKeterlambatan = int.parse(
+                      _biayaKeterlambatanController.text.isNotEmpty
+                          ? _biayaKeterlambatanController.text
+                          : "0");
+
+
+                  Map<String, dynamic> dataPelanggan = {
+                    "nama" : nama,
+                    "nomorWA" : nomorWA,
+                    "id": id,
+                    "alamat": alamat,
+                    "nomorMeter": nomorMeter,
+                    "garduTiang":garduTiang,
+                    "taripDaya":taripDaya,
+                    "kodeKedudukan": kodeKedudukan,
+                    "biayaRekening": biayaRekening,
+                    "biayaKeterlambatan": biayaKeterlambatan,
+                    "jumlahTunggakan": jumlahTunggakan,
+                  };
+                  Navigator.push(
+                    context,
+                    PageTransition(
+                      child: FormFotoLokasi(
+                        dataPelanggan: dataPelanggan,
+                      ),
+                      type: PageTransitionType.rightToLeft,
+                    ),
+                  );
+                },
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Text(
-                    "Upload Data",
-                    style: fontStyle1.copyWith(fontSize: 20, letterSpacing: 2),
+                    "Simpan dan Foto Lokasi",
+                    style: fontStyle1.copyWith(
+                      fontSize: 18,
+                    ),
                   ),
                 ),
                 style: ElevatedButton.styleFrom(

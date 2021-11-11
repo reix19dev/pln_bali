@@ -6,15 +6,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 
-TextEditingController _namaController =
-    TextEditingController(text: "Ramadhan Pratama");
-TextEditingController _emailController =
-    TextEditingController(text: "tama110199@gmail.com");
-TextEditingController _passwordController =
-    TextEditingController(text: "110199");
-TextEditingController _valPasswordController =
-    TextEditingController(text: "110199");
-
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -23,6 +14,15 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController _namaController =
+      TextEditingController(text: "Ramadhan Pratama");
+  TextEditingController _emailController =
+      TextEditingController(text: "tama110199@gmail.com");
+  TextEditingController _passwordController =
+      TextEditingController(text: "110199");
+  TextEditingController _valPasswordController =
+      TextEditingController(text: "110199");
+
   bool isVisiblePass = false;
   bool isLoginPage = true;
   bool isLoading = false;

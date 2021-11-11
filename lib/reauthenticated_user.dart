@@ -12,10 +12,10 @@ class ReauthenticatedUser extends StatefulWidget {
   _ReauthenticatedUserState createState() => _ReauthenticatedUserState();
 }
 
-TextEditingController _emailController = TextEditingController();
-TextEditingController _passwordController = TextEditingController();
-
 class _ReauthenticatedUserState extends State<ReauthenticatedUser> {
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
   bool isVisiblePass = false;
   bool isLoading = false;
 
