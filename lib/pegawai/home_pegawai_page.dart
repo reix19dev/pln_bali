@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pln_bali/pegawai/edit_profil_pegawai_page.dart';
+import 'package:pln_bali/pegawai/form_data_penugasan.dart';
 import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 import 'package:shimmer/shimmer.dart';
@@ -27,6 +29,7 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
 
   //logic variable
   bool isLoading = false;
+  bool isLoadingEvent = false;
 
   //data variable
   String? nama = '';
@@ -96,6 +99,25 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
     });
   }
 
+  // snackBar Widget
+  tampilSnackBar(String? message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: abuTua,
+        content: Text(
+          '$message',
+          style: fontStyle1,
+        ),
+        duration: Duration(milliseconds: 2000),
+        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(
@@ -159,49 +181,50 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
             IconButton(
               onPressed: () async {
                 showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        clipBehavior: Clip.none,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      clipBehavior: Clip.none,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      content: Text(
+                        "Apakah anda yakin ingin keluar dari akun anda?",
+                        style: fontStyle1.copyWith(
+                          color: abuMuda,
+                          fontWeight: FontWeight.bold,
                         ),
-                        content: Text(
-                          "Apakah anda yakin ingin keluar dari akun anda?",
-                          style: fontStyle1.copyWith(
-                            color: abuMuda,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: abuMuda,
-                                  borderRadius: BorderRadius.circular(8)),
-                              child: Text(
-                                "Tidak",
-                                style: fontStyle1.copyWith(color: Colors.white),
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              await FirebaseAuth.instance.signOut();
-                              Navigator.pop(context);
-                            },
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                                color: abuMuda,
+                                borderRadius: BorderRadius.circular(8)),
                             child: Text(
-                              "Ya",
-                              style: fontStyle1.copyWith(color: abuMuda),
+                              "Tidak",
+                              style: fontStyle1.copyWith(color: Colors.white),
                             ),
                           ),
-                        ],
-                      );
-                    });
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            await FirebaseAuth.instance.signOut();
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            "Ya",
+                            style: fontStyle1.copyWith(color: abuMuda),
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                );
               },
               icon: Icon(
                 FontAwesomeIcons.signOutAlt,
@@ -275,7 +298,21 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                                 menuItemWidget(
                                   namaMenu: "Checkin Penugasan",
                                   iconData: FontAwesomeIcons.userCheck,
-                                  onPressed: () {
+                                  onPressed: () async {
+                                    DateTime today = DateTime.now();
+                                    String tglPresensi =
+                                        "${today.day}-${today.month}-${today.year}";
+
+                                    Map<String, dynamic> dataPresensi = {
+                                      "isCheckIn": true,
+                                    };
+                                    await FirebaseFirestore.instance
+                                        .collection("users")
+                                        .doc(widget.user.uid)
+                                        .collection("list_presensi")
+                                        .doc("$tglPresensi")
+                                        .set(dataPresensi);
+
                                     showDialog(
                                       context: context,
                                       builder: (context) {
@@ -321,6 +358,40 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                                 menuItemWidget(
                                   namaMenu: "Input Data Penugasan",
                                   iconData: FontAwesomeIcons.penAlt,
+                                  onPressed: () async {
+                                    DateTime today = DateTime.now();
+                                    String tglPresensi =
+                                        "${today.day}-${today.month}-${today.year}";
+
+                                    late bool isCheckIn;
+
+                                    await FirebaseFirestore.instance
+                                        .collection("users")
+                                        .doc(widget.user.uid)
+                                        .collection("list_presensi")
+                                        .doc("$tglPresensi")
+                                        .get()
+                                        .then((value) {
+                                      if (value.exists) {
+                                        isCheckIn = true;
+                                      } else {
+                                        isCheckIn = false;
+                                      }
+                                    });
+
+                                    if (!isCheckIn) {
+                                      tampilSnackBar(
+                                          "Anda belum melakukan checkin penugasan");
+                                    } else {
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                            child: FormDataPenugasan(),
+                                            type:
+                                                PageTransitionType.rightToLeft,
+                                          ));
+                                    }
+                                  },
                                 ),
                                 menuItemWidget(
                                   namaMenu: "Riwayat Penugasan",
@@ -367,30 +438,31 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                                             Radius.circular(8.0)),
                                         child: Container(
                                           width: double.infinity,
-                                          child: Image.network(
-                                            item,
+                                          child: CachedNetworkImage(
                                             fit: BoxFit.fill,
-                                            loadingBuilder: (context, child,
-                                                loadingProgress) {
-                                              if (loadingProgress == null) {
-                                                return child;
-                                              } else {
-                                                return Shimmer.fromColors(
-                                                  baseColor: Colors.white,
-                                                  highlightColor:
-                                                      Colors.grey.shade300,
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4)),
-                                                    height: 200.h,
-                                                    width: double.infinity,
-                                                  ),
-                                                );
-                                              }
-                                            },
+                                            imageUrl: '$item',
+                                            placeholder: (context, url) =>
+                                                Shimmer.fromColors(
+                                              baseColor: Colors.white,
+                                              highlightColor:
+                                                  Colors.grey.shade300,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(4),
+                                                ),
+                                                height: 200.h,
+                                                width: double.infinity,
+                                              ),
+                                            ),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
+                                            fadeOutDuration:
+                                                const Duration(seconds: 1),
+                                            fadeInDuration:
+                                                const Duration(seconds: 1),
                                           ),
                                         ),
                                       ),
@@ -411,7 +483,7 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                             viewportFraction: 1,
                             enableInfiniteScroll: true,
                             reverse: false,
-                            autoPlayInterval: Duration(seconds: 20),
+                            autoPlayInterval: Duration(seconds: 5),
                             autoPlayAnimationDuration:
                                 Duration(milliseconds: 800),
                             autoPlayCurve: Curves.fastOutSlowIn,

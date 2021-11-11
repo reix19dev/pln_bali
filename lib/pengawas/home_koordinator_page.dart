@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -328,30 +329,31 @@ class _HomeKoordinatorPageState extends State<HomeKoordinatorPage> {
                                             Radius.circular(8.0)),
                                         child: Container(
                                           width: double.infinity,
-                                          child: Image.network(
-                                            item,
+                                          child: CachedNetworkImage(
                                             fit: BoxFit.fill,
-                                            loadingBuilder: (context, child,
-                                                loadingProgress) {
-                                              if (loadingProgress == null) {
-                                                return child;
-                                              } else {
-                                                return Shimmer.fromColors(
-                                                  baseColor: Colors.white,
-                                                  highlightColor:
-                                                      Colors.grey.shade300,
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4)),
-                                                    height: 200.h,
-                                                    width: double.infinity,
-                                                  ),
-                                                );
-                                              }
-                                            },
+                                            imageUrl: '$item',
+                                            placeholder: (context, url) =>
+                                                Shimmer.fromColors(
+                                              baseColor: Colors.white,
+                                              highlightColor:
+                                                  Colors.grey.shade300,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(4),
+                                                ),
+                                                height: 200.h,
+                                                width: double.infinity,
+                                              ),
+                                            ),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
+                                            fadeOutDuration:
+                                                const Duration(seconds: 1),
+                                            fadeInDuration:
+                                                const Duration(seconds: 1),
                                           ),
                                         ),
                                       ),
