@@ -9,7 +9,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pln_bali/pegawai/edit_profil_pegawai_page.dart';
-import 'package:pln_bali/pegawai/form_data_penugasan.dart';
+import 'package:pln_bali/pegawai/form_data_penugasan_page.dart';
+import 'package:pln_bali/pegawai/riwayat_penugasan_page.dart';
 import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 import 'package:shimmer/shimmer.dart';
@@ -396,9 +397,19 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                                   },
                                 ),
                                 menuItemWidget(
-                                  namaMenu: "Riwayat Penugasan",
-                                  iconData: FontAwesomeIcons.addressBook,
-                                ),
+                                    namaMenu: "Riwayat Penugasan",
+                                    iconData: FontAwesomeIcons.addressBook,
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        PageTransition(
+                                          child: RiwayatPenugasanPage(
+                                            user: widget.user,
+                                          ),
+                                          type: PageTransitionType.rightToLeft,
+                                        ),
+                                      );
+                                    }),
                                 menuItemWidget(
                                   namaMenu: "Data Pelanggan",
                                   iconData: FontAwesomeIcons.addressBook,

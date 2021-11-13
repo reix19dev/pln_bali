@@ -10,6 +10,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pln_bali/pengawas/edit_profil_koordinator_page.dart';
 import 'package:pln_bali/pengawas/list_pegawai_page.dart';
+import 'package:pln_bali/pengawas/monitoring_pegawai_page.dart';
 import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 import 'package:shimmer/shimmer.dart';
@@ -275,9 +276,18 @@ class _HomeKoordinatorPageState extends State<HomeKoordinatorPage> {
                             child: Row(
                               children: [
                                 menuItemWidget(
-                                  namaMenu: "Monitoring Penugasan",
-                                  iconData: FontAwesomeIcons.tv,
-                                ),
+                                    namaMenu: "Monitoring Penugasan",
+                                    iconData: FontAwesomeIcons.tv,
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              child: MonitoringPegawaiPage(
+                                                user: widget.user,
+                                              ),
+                                              type: PageTransitionType
+                                                  .rightToLeft));
+                                    }),
                                 menuItemWidget(
                                     namaMenu: "List Pegawai",
                                     iconData: FontAwesomeIcons.list,

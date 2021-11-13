@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:pln_bali/pegawai/form_foto_lokasi.dart';
+import 'package:pln_bali/pegawai/form_foto_lokasi_page.dart';
 import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 

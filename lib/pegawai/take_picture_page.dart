@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:pln_bali/pegawai/form_foto_lokasi.dart';
+import 'package:pln_bali/pegawai/form_foto_lokasi_page.dart';
 import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 import 'package:shimmer/shimmer.dart';
