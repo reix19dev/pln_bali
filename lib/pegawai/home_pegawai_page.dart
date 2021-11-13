@@ -386,7 +386,9 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                                       Navigator.push(
                                           context,
                                           PageTransition(
-                                            child: FormDataPenugasan(),
+                                            child: FormDataPenugasanPage(
+                                              user: widget.user,
+                                            ),
                                             type:
                                                 PageTransitionType.rightToLeft,
                                           ));

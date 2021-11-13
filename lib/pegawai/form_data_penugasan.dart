@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -7,14 +8,15 @@ import 'package:pln_bali/pegawai/form_foto_lokasi.dart';
 import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 
-class FormDataPenugasan extends StatefulWidget {
-  const FormDataPenugasan({Key? key}) : super(key: key);
+class FormDataPenugasanPage extends StatefulWidget {
+  final User user;
+  const FormDataPenugasanPage({Key? key, required this.user}) : super(key: key);
 
   @override
-  _FormDataPenugasanState createState() => _FormDataPenugasanState();
+  _FormDataPenugasanPageState createState() => _FormDataPenugasanPageState();
 }
 
-class _FormDataPenugasanState extends State<FormDataPenugasan> {
+class _FormDataPenugasanPageState extends State<FormDataPenugasanPage> {
   TextEditingController _namaController = TextEditingController();
   TextEditingController _nomorWAController = TextEditingController();
   TextEditingController _idController = TextEditingController();
@@ -464,7 +466,8 @@ class _FormDataPenugasanState extends State<FormDataPenugasan> {
                   Navigator.push(
                     context,
                     PageTransition(
-                      child: FormFotoLokasi(
+                      child: FormFotoLokasiPage(
+                        user: widget.user,
                         dataPelanggan: dataPelanggan,
                       ),
                       type: PageTransitionType.rightToLeft,
