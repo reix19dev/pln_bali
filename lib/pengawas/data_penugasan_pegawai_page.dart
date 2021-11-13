@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,15 +9,17 @@ import 'package:pln_bali/utils/convert_waktu.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 import 'package:shimmer/shimmer.dart';
 
-class RiwayatPenugasanPage extends StatefulWidget {
-  final User user;
-  const RiwayatPenugasanPage({Key? key, required this.user}) : super(key: key);
+class DataPenugasanPegawaiPage extends StatefulWidget {
+  final String uidPegawai;
+  const DataPenugasanPegawaiPage({Key? key, required this.uidPegawai})
+      : super(key: key);
 
   @override
-  _RiwayatPenugasanPageState createState() => _RiwayatPenugasanPageState();
+  _DataPenugasanPegawaiPageState createState() =>
+      _DataPenugasanPegawaiPageState();
 }
 
-class _RiwayatPenugasanPageState extends State<RiwayatPenugasanPage> {
+class _DataPenugasanPegawaiPageState extends State<DataPenugasanPegawaiPage> {
   bool isLoading = false;
 
   String tanggal = "Silahkan pilih tanggal";
@@ -58,7 +59,7 @@ class _RiwayatPenugasanPageState extends State<RiwayatPenugasanPage> {
 
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(widget.user.uid)
+        .doc(widget.uidPegawai)
         .collection("list_presensi")
         .doc("$tglPresensi")
         .get()

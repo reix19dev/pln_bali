@@ -304,56 +304,77 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                                     String tglPresensi =
                                         "${today.day}-${today.month}-${today.year}";
 
-                                    Map<String, dynamic> dataPresensi = {
-                                      "isCheckIn": true,
-                                    };
+                                    late bool isCheckIn;
+
                                     await FirebaseFirestore.instance
                                         .collection("users")
                                         .doc(widget.user.uid)
                                         .collection("list_presensi")
                                         .doc("$tglPresensi")
-                                        .set(dataPresensi);
+                                        .get()
+                                        .then((value) {
+                                      if (value.exists) {
+                                        isCheckIn = true;
+                                      } else {
+                                        isCheckIn = false;
+                                      }
+                                    });
 
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          clipBehavior: Clip.none,
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                          content: Text(
-                                            "Terimakasih telah melakukan check in. Silahkan menginput data penugasan.",
-                                            style: fontStyle1.copyWith(
-                                              color: abuMuda,
-                                              fontWeight: FontWeight.bold,
+                                    if (!isCheckIn) {
+                                      Map<String, dynamic> dataPresensi = {
+                                        "isCheckIn": true,
+                                      };
+                                      await FirebaseFirestore.instance
+                                          .collection("users")
+                                          .doc(widget.user.uid)
+                                          .collection("list_presensi")
+                                          .doc("$tglPresensi")
+                                          .set(dataPresensi);
+
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            clipBehavior: Clip.none,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
-                                            textAlign: TextAlign.justify,
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Container(
-                                                padding: EdgeInsets.all(8),
-                                                decoration: BoxDecoration(
-                                                    color: abuMuda,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8)),
-                                                child: Text(
-                                                  "OK",
-                                                  style: fontStyle1.copyWith(
-                                                      color: Colors.white),
+                                            content: Text(
+                                              "Terimakasih telah melakukan check in. Silahkan menginput data penugasan.",
+                                              style: fontStyle1.copyWith(
+                                                color: abuMuda,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              textAlign: TextAlign.justify,
+                                            ),
+                                            actions: [
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.all(8),
+                                                  decoration: BoxDecoration(
+                                                      color: abuMuda,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8)),
+                                                  child: Text(
+                                                    "OK",
+                                                    style: fontStyle1.copyWith(
+                                                        color: Colors.white),
+                                                  ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      tampilSnackBar(
+                                          "Anda telah melakukan checkin penugasan");
+                                    }
                                   },
                                 ),
                                 menuItemWidget(
