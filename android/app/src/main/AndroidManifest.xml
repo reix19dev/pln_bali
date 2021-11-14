@@ -18,11 +18,10 @@
       <action android:name="android.intent.action.SEND" />
       <data android:mimeType="*/*" />
     </intent>
-
   </queries>
 
    <application
-        android:label="pln_bali"
+        android:label="IDETECH"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
