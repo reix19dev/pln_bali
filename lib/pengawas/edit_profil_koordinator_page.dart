@@ -1,11 +1,14 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class EditProfilKoordinatorPage extends StatefulWidget {
   final User user;
@@ -28,14 +31,18 @@ class _EditProfilKoordinatorPageState extends State<EditProfilKoordinatorPage> {
   bool isEditNomorHP = false;
 
   //data variable
-  String? nama = '';
-  String? email = '';
-  String? nomorHP = '';
-  String? urlFotoProfil = '';
-  String? koorID = '';
+  String nama = '';
+  String email = '';
+  String nomorHP = '';
+  String urlFotoProfil = '';
+  String koorID = '';
   bool isVerified = false;
 
   List<String> imgList = [];
+
+  final ImagePicker _imagePicker = ImagePicker();
+  late File fotoProfil;
+  late String pathFotoProfil;
 
   @override
   void initState() {
@@ -75,6 +82,21 @@ class _EditProfilKoordinatorPageState extends State<EditProfilKoordinatorPage> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  Future<void> getFotoProfile() async {
+    final image = await _imagePicker.pickImage(
+      source: ImageSource.gallery,
+    );
+
+    setState(() {
+      if (image != null) {
+        fotoProfil = File(image.path);
+        pathFotoProfil = image.path;
+      }
+    });
+    print("TESTING PATH GET FROM GALLERY");
+    print(pathFotoProfil);
   }
 
   // snackBar Widget
@@ -153,7 +175,7 @@ class _EditProfilKoordinatorPageState extends State<EditProfilKoordinatorPage> {
                                   ),
                                 )
                               : Image.network(
-                                  urlFotoProfil!,
+                                  urlFotoProfil,
                                   fit: BoxFit.cover,
                                   height: 64.h,
                                   width: 64.w,
@@ -184,7 +206,38 @@ class _EditProfilKoordinatorPageState extends State<EditProfilKoordinatorPage> {
                           FontAwesomeIcons.camera,
                           color: abuTua,
                         ),
-                        onTap: () {},
+                        onTap: () async {
+                          //ambil dari gallery
+                          await getFotoProfile();
+
+                          //upload ke firebase
+                          final firebase_storage.Reference storageRef =
+                              firebase_storage.FirebaseStorage.instanceFor(
+                                      bucket:
+                                          'gs://pln-bali-c4058.appspot.com')
+                                  .ref()
+                                  .child("$email")
+                                  .child("Foto Profil.png");
+
+                          final CollectionReference collectionUser =
+                              FirebaseFirestore.instance.collection("users");
+
+                          try {
+                            print("Proses upload foto profil");
+
+                            await storageRef
+                                .putData(fotoProfil.readAsBytesSync());
+
+                            String urlDownload =
+                                await storageRef.getDownloadURL();
+
+                            await collectionUser.doc(widget.user.uid).update({
+                              'urlFotoProfil': urlDownload,
+                            });
+                          } catch (e) {
+                            print(e);
+                          }
+                        },
                       ),
                     ),
                   ],
@@ -245,7 +298,7 @@ class _EditProfilKoordinatorPageState extends State<EditProfilKoordinatorPage> {
                   AnimatedCrossFade(
                     firstChild: buildDataPegawai(
                       title: "Nama",
-                      value: nama!,
+                      value: nama,
                       onEdit: () async {
                         setState(() {
                           isEditNama = true;
@@ -266,7 +319,7 @@ class _EditProfilKoordinatorPageState extends State<EditProfilKoordinatorPage> {
                   AnimatedCrossFade(
                     firstChild: buildDataPegawai(
                       title: "Email",
-                      value: email!,
+                      value: email,
                       onEdit: () async {
                         setState(() {
                           isEditEmail = true;
@@ -287,7 +340,7 @@ class _EditProfilKoordinatorPageState extends State<EditProfilKoordinatorPage> {
                   AnimatedCrossFade(
                     firstChild: buildDataPegawai(
                       title: "Nomor HP",
-                      value: nomorHP!,
+                      value: nomorHP,
                       onEdit: () async {
                         setState(() {
                           isEditNomorHP = true;

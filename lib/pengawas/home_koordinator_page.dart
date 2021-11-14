@@ -32,10 +32,10 @@ class _HomeKoordinatorPageState extends State<HomeKoordinatorPage> {
   bool isLoading = false;
 
   //data variable
-  String? nama = '';
-  String? email = '';
-  String? nomorHP = '';
-  String? urlFotoProfil = '';
+  String nama = '';
+  String email = '';
+  String nomorHP = '';
+  String urlFotoProfil = '';
   bool isVerified = false;
 
   List<String> imgList = [];
@@ -476,7 +476,7 @@ class _HomeKoordinatorPageState extends State<HomeKoordinatorPage> {
                   ),
                 )
               : Image.network(
-                  "dbController.userModel.urlFotoProfil!",
+                  urlFotoProfil,
                   fit: BoxFit.cover,
                   height: 64.h,
                   width: 64.w,
