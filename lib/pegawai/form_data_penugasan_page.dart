@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,7 +18,10 @@ class FormDataPenugasanPage extends StatefulWidget {
 }
 
 class _FormDataPenugasanPageState extends State<FormDataPenugasanPage> {
+  TextEditingController _unitupController = TextEditingController();
   TextEditingController _namaController = TextEditingController();
+  TextEditingController _namaPNJController = TextEditingController();
+  TextEditingController _nomorTelpController = TextEditingController();
   TextEditingController _nomorWAController = TextEditingController();
   TextEditingController _idController = TextEditingController();
   TextEditingController _alamatController = TextEditingController();
@@ -29,6 +33,7 @@ class _FormDataPenugasanPageState extends State<FormDataPenugasanPage> {
   TextEditingController _biayaKeterlambatanController = TextEditingController();
 
   int jumlahTunggakan = 0;
+  bool isCariLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +63,143 @@ class _FormDataPenugasanPageState extends State<FormDataPenugasanPage> {
             children: [
               SizedBox(
                 height: 16.h,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: TextField(
+                  controller: _idController,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: abuMuda),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: abuMuda),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    labelText: "ID Pelanggan",
+                    labelStyle: fontStyle1.copyWith(color: abuMuda),
+                    hintText: "5511XXXXXXXX",
+                    hintStyle: fontStyle1.copyWith(
+                        color: abuMuda.withOpacity(0.5), fontSize: 16),
+                    prefixIcon: Icon(
+                      FontAwesomeIcons.idCard,
+                      size: 16,
+                      color: abuMuda,
+                    ),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    String idPelanggan = _idController.text.trim();
+                    setState(() {
+                      isCariLoading = true;
+                    });
+
+                    await FirebaseFirestore.instance
+                        .collection('pelanggan')
+                        .where("idPelanggan", isEqualTo: idPelanggan)
+                        .get()
+                        .then((value) {
+                      if (value.docs.first.exists) {
+                        setState(() {
+                          //     "tarif": dataTest[i]["tarif"],
+                          //     "daya": dataTest[i]["daya"],
+                          //     "nomorHP": dataTest[i]["nomorHP"],
+                          //     "jenisLayanan": dataTest[i]["jenisLayanan"],
+                          //     "kodeKedudukan": dataTest[i]["kodeKedudukan"],
+                          //     "nomorMeter": dataTest[i]["nomorMeter"],
+                          //     "merkMeter": dataTest[i]["merkMeter"],
+                          //     "typeMeter": dataTest[i]["typeMeter"],
+                          //     "tahunBuatMeter": dataTest[i]["tahunBuatMeter"],
+                          //     "nomorGardu": dataTest[i]["nomorGardu"],
+                          //     "namaGardu": dataTest[i]["namaGardu"],
+                          //     "kapasitasTrafo": dataTest[i]["kapasitasTrafo"],
+                          //     "tegangan": dataTest[i]["tegangan"],
+                          //     "nomorMeterPrepaid": dataTest[i]["nomorMeterPrepaid"],
+                          //     "koordinatX":
+                          //         double.parse(dataTest[i]["koordinatX"].toString()),
+                          //     "koordinatY":
+                          //         double.parse(dataTest[i]["koordinatY"].toString()),
+                          //     "namaUP": dataTest[i]["namaUP"]
+                          _unitupController.text =
+                              value.docs.first.data()['unitup'] ?? '-';
+                          _namaController.text =
+                              value.docs.first.data()['nama'] ?? '-';
+                          _namaPNJController.text =
+                              value.docs.first.data()['namaPNJ'] ?? '-';
+                          _nomorTelpController.text =
+                              value.docs.first.data()['nomorTelp'] ?? '-';
+                          _nomorWAController.text =
+                              value.docs.first.data()['nomorWA'] ?? '-';
+                          _alamatController.text = '-';
+                          _nomorMeterController.text =
+                              value.docs.first.data()['nomorMeter'] ?? '-';
+                          _garduTiangController.text =
+                              value.docs.first.data()['namaGardu'] ?? '-';
+                          _taripDayaController.text =
+                              '${value.docs.first.data()['tarif'] ?? '-'}/${value.docs.first.data()['daya'] ?? '-'}';
+                          _kodeKedudukanController.text =
+                              value.docs.first.data()['kodeKedudukan'] ?? '-';
+                        });
+                      }
+                    });
+
+                    setState(() {
+                      isCariLoading = false;
+                    });
+                  },
+                  child: Text(
+                    "Periksa",
+                    style: fontStyle1.copyWith(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16.sp,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                      primary: abuTua,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12))),
+                ),
+              ),
+              SizedBox(
+                height: 16.h,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: TextField(
+                  controller: _unitupController,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: abuMuda),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: abuMuda),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    labelText: "Unitup",
+                    labelStyle: fontStyle1.copyWith(color: abuMuda),
+                    hintText: "55110",
+                    hintStyle: fontStyle1.copyWith(
+                        color: abuMuda.withOpacity(0.5), fontSize: 16),
+                    prefixIcon: Icon(
+                      FontAwesomeIcons.moneyCheckAlt,
+                      size: 16,
+                      color: abuMuda,
+                    ),
+                  ),
+                  keyboardType: TextInputType.number,
+                ),
+              ),
+              SizedBox(
+                height: 8.h,
               ),
               Container(
                 decoration: BoxDecoration(
@@ -95,6 +237,68 @@ class _FormDataPenugasanPageState extends State<FormDataPenugasanPage> {
                   color: Colors.white,
                 ),
                 child: TextField(
+                  controller: _namaPNJController,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: abuMuda),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: abuMuda),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    labelText: "Nama Penanggung Jawab",
+                    labelStyle: fontStyle1.copyWith(color: abuMuda),
+                    hintText: "Surya Putra",
+                    hintStyle: fontStyle1.copyWith(
+                        color: abuMuda.withOpacity(0.5), fontSize: 16),
+                    prefixIcon: Icon(
+                      FontAwesomeIcons.userAlt,
+                      size: 16,
+                      color: abuMuda,
+                    ),
+                  ),
+                  keyboardType: TextInputType.name,
+                ),
+              ),
+              SizedBox(
+                height: 16.h,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: TextField(
+                  controller: _nomorTelpController,
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: abuMuda),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: abuMuda),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
+                    labelText: "Nomor Telepon",
+                    labelStyle: fontStyle1.copyWith(color: abuMuda),
+                    hintText: "0XXXXXXXXX",
+                    hintStyle: fontStyle1.copyWith(
+                        color: abuMuda.withOpacity(0.5), fontSize: 16),
+                    prefixIcon: Icon(
+                      FontAwesomeIcons.phone,
+                      size: 16,
+                      color: abuMuda,
+                    ),
+                  ),
+                  keyboardType: TextInputType.phone,
+                ),
+              ),
+              SizedBox(
+                height: 16.h,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: TextField(
                   controller: _nomorWAController,
                   decoration: InputDecoration(
                     border: InputBorder.none,
@@ -116,37 +320,6 @@ class _FormDataPenugasanPageState extends State<FormDataPenugasanPage> {
                     ),
                   ),
                   keyboardType: TextInputType.phone,
-                ),
-              ),
-              SizedBox(
-                height: 16.h,
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: TextField(
-                  controller: _idController,
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: abuMuda),
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                    enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: abuMuda),
-                        borderRadius: BorderRadius.all(Radius.circular(20))),
-                    labelText: "ID Pelanggan",
-                    labelStyle: fontStyle1.copyWith(color: abuMuda),
-                    hintText: "5511XXXXXXXX",
-                    hintStyle: fontStyle1.copyWith(
-                        color: abuMuda.withOpacity(0.5), fontSize: 16),
-                    prefixIcon: Icon(
-                      FontAwesomeIcons.idCard,
-                      size: 16,
-                      color: abuMuda,
-                    ),
-                  ),
-                  keyboardType: TextInputType.number,
                 ),
               ),
               SizedBox(
@@ -449,15 +622,14 @@ class _FormDataPenugasanPageState extends State<FormDataPenugasanPage> {
                           ? _biayaKeterlambatanController.text
                           : "0");
 
-
                   Map<String, dynamic> dataPelanggan = {
-                    "nama" : nama,
-                    "nomorWA" : nomorWA,
+                    "nama": nama,
+                    "nomorWA": nomorWA,
                     "id": id,
                     "alamat": alamat,
                     "nomorMeter": nomorMeter,
-                    "garduTiang":garduTiang,
-                    "taripDaya":taripDaya,
+                    "garduTiang": garduTiang,
+                    "taripDaya": taripDaya,
                     "kodeKedudukan": kodeKedudukan,
                     "biayaRekening": biayaRekening,
                     "biayaKeterlambatan": biayaKeterlambatan,

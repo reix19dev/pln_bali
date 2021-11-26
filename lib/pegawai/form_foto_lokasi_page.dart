@@ -26,6 +26,9 @@ class FormFotoLokasiPage extends StatefulWidget {
 class _FormFotoLokasiPageState extends State<FormFotoLokasiPage> {
   bool isLoading = false;
   bool isUploadLoading = false;
+  bool isAmbilFoto1 = false;
+  bool isAmbilFoto2 = false;
+  bool isAmbilFoto3 = false;
 
   String urlFotoLokasi1 = '';
   String urlFotoLokasi2 = '';
@@ -110,18 +113,17 @@ class _FormFotoLokasiPageState extends State<FormFotoLokasiPage> {
           padding: const EdgeInsets.all(10.0),
           child: ListView(
             children: [
-              buildDataImagePasien("foto_lokasi_1"),
-              buildDataImagePasien("foto_lokasi_2"),
-              buildDataImagePasien("foto_lokasi_3"),
+              buildDataImagePasien("foto_lokasi_1", isAmbilFoto1),
+              buildDataImagePasien("foto_lokasi_2", isAmbilFoto2),
+              buildDataImagePasien("foto_lokasi_3", isAmbilFoto3),
               SizedBox(
                 height: 10.h,
               ),
               (isUploadLoading)
                   ? Container(
                       padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8)
-                      ),
+                      decoration:
+                          BoxDecoration(borderRadius: BorderRadius.circular(8)),
                       height: 56,
                       child: Stack(
                         children: [
@@ -203,7 +205,7 @@ class _FormFotoLokasiPageState extends State<FormFotoLokasiPage> {
     );
   }
 
-  Widget buildDataImagePasien(String idFoto) {
+  Widget buildDataImagePasien(String idFoto, bool isAmbilFoto) {
     String? urlImage;
     if (idFoto == "foto_lokasi_1") {
       urlImage = urlFotoLokasi1;
@@ -251,7 +253,7 @@ class _FormFotoLokasiPageState extends State<FormFotoLokasiPage> {
                           child: Center(
                             child: Icon(
                               FontAwesomeIcons.image,
-                              size: 100,
+                              size: 50,
                               color: abuMuda,
                             ),
                           ),
@@ -294,24 +296,98 @@ class _FormFotoLokasiPageState extends State<FormFotoLokasiPage> {
                 alignment: Alignment.topRight,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 4, right: 12),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      print(idFoto);
-                      if (idFoto == "foto_lokasi_1") {
-                        getFotoLokasi("foto_lokasi_1");
-                      } else if (idFoto == "foto_lokasi_2") {
-                        getFotoLokasi("foto_lokasi_2");
-                      } else if (idFoto == "foto_lokasi_3") {
-                        getFotoLokasi("foto_lokasi_3");
-                      }
-                    },
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: abuTua,
-                    ),
-                    child: Text(
-                      "Ambil Foto",
-                      style: TextStyle(fontSize: 12, letterSpacing: 1),
-                    ),
+                  child: AnimatedCrossFade(
+                    firstChild: (!isAmbilFoto)
+                        ? ElevatedButton(
+                            onPressed: () {
+                              setState(() {
+                                if (idFoto == "foto_lokasi_1") {
+                                  isAmbilFoto1 = !isAmbilFoto1;
+                                } else if (idFoto == "foto_lokasi_2") {
+                                  isAmbilFoto2 = !isAmbilFoto2;
+                                } else if (idFoto == "foto_lokasi_3") {
+                                  isAmbilFoto3 = !isAmbilFoto3;
+                                }
+                              });
+                            },
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: abuTua,
+                            ),
+                            child: Text(
+                              "Ambil Foto",
+                              style: TextStyle(fontSize: 12, letterSpacing: 1),
+                            ),
+                          )
+                        : Container(),
+                    secondChild: (isAmbilFoto)
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              ElevatedButton(
+                                onPressed: () {
+                                  print(idFoto);
+                                  if (idFoto == "foto_lokasi_1") {
+                                    getFotoLokasi("foto_lokasi_1");
+                                  } else if (idFoto == "foto_lokasi_2") {
+                                    getFotoLokasi("foto_lokasi_2");
+                                  } else if (idFoto == "foto_lokasi_3") {
+                                    getFotoLokasi("foto_lokasi_3");
+                                  }
+                                },
+                                style: OutlinedButton.styleFrom(
+                                  backgroundColor: abuTua,
+                                ),
+                                child: Text(
+                                  "Camera",
+                                  style:
+                                      TextStyle(fontSize: 12, letterSpacing: 1),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 8.w,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {},
+                                style: OutlinedButton.styleFrom(
+                                  backgroundColor: abuTua,
+                                ),
+                                child: Text(
+                                  "Galery",
+                                  style:
+                                      TextStyle(fontSize: 12, letterSpacing: 1),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 8.w,
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  setState(() {
+                                    if (idFoto == "foto_lokasi_1") {
+                                      isAmbilFoto1 = !isAmbilFoto1;
+                                    } else if (idFoto == "foto_lokasi_2") {
+                                      isAmbilFoto2 = !isAmbilFoto2;
+                                    } else if (idFoto == "foto_lokasi_3") {
+                                      isAmbilFoto3 = !isAmbilFoto3;
+                                    }
+                                  });
+                                },
+                                style: OutlinedButton.styleFrom(
+                                  backgroundColor: abuTua,
+                                ),
+                                child: Text(
+                                  "X",
+                                  style:
+                                      TextStyle(fontSize: 12, letterSpacing: 1),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Container(),
+                    crossFadeState: (!isAmbilFoto)
+                        ? CrossFadeState.showFirst
+                        : CrossFadeState.showSecond,
+                    duration: Duration(milliseconds: 300),
                   ),
                 ),
               ),

@@ -12,6 +12,7 @@ import 'package:pln_bali/pegawai/edit_profil_pegawai_page.dart';
 import 'package:pln_bali/pegawai/form_data_penugasan_page.dart';
 import 'package:pln_bali/pegawai/riwayat_penugasan_page.dart';
 import 'package:pln_bali/utils/colors.dart';
+import 'package:pln_bali/utils/dataTest.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -232,6 +233,47 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                 color: abuTua,
               ),
             ),
+            IconButton(
+              onPressed: () async {
+                // for (int i = 0; i < dataTest.length; i++) {
+                //   Map<String, dynamic> dataUser = {
+                //     "unitup": dataTest[i]["unitup"] ?? "-",
+                //     "idPelanggan": dataTest[i]["idPelanggan"] ?? "-",
+                //     "nama": dataTest[i]["nama"] ?? "-",
+                //     "namaPNJ": dataTest[i]["namaPNJ"] ?? "-",
+                //     "tarif": dataTest[i]["tarif"] ?? "-",
+                //     "daya": dataTest[i]["daya"] ?? "-",
+                //     "nomorTelp": dataTest[i]["nomorTelp"] ?? "-",
+                //     "nomorWA": dataTest[i]["nomorWA"] ?? "-",
+                //     "jenisLayanan": dataTest[i]["jenisLayanan"] ?? "-",
+                //     "kodeKedudukan": dataTest[i]["kodeKedudukan"] ?? "-",
+                //     "nomorMeter": dataTest[i]["nomorMeter"] ?? "-",
+                //     "merkMeter": dataTest[i]["merkMeter"] ?? "-",
+                //     "typeMeter": dataTest[i]["typeMeter"] ?? "-",
+                //     "tahunBuatMeter": dataTest[i]["tahunBuatMeter"] ?? "-",
+                //     "nomorGardu": dataTest[i]["nomorGardu"] ?? "-",
+                //     "namaGardu": dataTest[i]["namaGardu"] ?? "-",
+                //     "kapasitasTrafo": dataTest[i]["kapasitasTrafo"] ?? "-",
+                //     "tegangan": dataTest[i]["tegangan"] ?? "-",
+                //     "nomorMeterPrepaid":
+                //         dataTest[i]["nomorMeterPrepaid"] ?? "-",
+                //     "koordinatX": double.parse(
+                //         (dataTest[i]["koordinatX"] ?? "0").toString()),
+                //     "koordinatY": double.parse(
+                //         (dataTest[i]["koordinatY"] ?? "0").toString()),
+                //     "namaUP": dataTest[i]["namaUP"] ?? "-"
+                //   };
+
+                //   await FirebaseFirestore.instance
+                //       .collection("pelanggan")
+                //       .add(dataUser);
+                // }
+              },
+              icon: Icon(
+                FontAwesomeIcons.book,
+                color: abuTua,
+              ),
+            )
           ],
           title: Row(
             children: [
@@ -321,16 +363,6 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                                     });
 
                                     if (!isCheckIn) {
-                                      Map<String, dynamic> dataPresensi = {
-                                        "isCheckIn": true,
-                                      };
-                                      await FirebaseFirestore.instance
-                                          .collection("users")
-                                          .doc(widget.user.uid)
-                                          .collection("list_presensi")
-                                          .doc("$tglPresensi")
-                                          .set(dataPresensi);
-
                                       showDialog(
                                         context: context,
                                         builder: (context) {
@@ -341,7 +373,7 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                                                   BorderRadius.circular(8),
                                             ),
                                             content: Text(
-                                              "Terimakasih telah melakukan check in. Silahkan menginput data penugasan.",
+                                              "Fitur ini merekam koordinat lokasi anda. Pastikan anda telah berada dilokasi pelanggan sebelum melakukan checkin. Apakah anda sudah dilokasi pelanggan?",
                                               style: fontStyle1.copyWith(
                                                 color: abuMuda,
                                                 fontWeight: FontWeight.bold,
@@ -351,6 +383,38 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                                             actions: [
                                               TextButton(
                                                 onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                child: Container(
+                                                  padding: EdgeInsets.all(8),
+                                                  decoration: BoxDecoration(
+                                                      color: abuMuda,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8)),
+                                                  child: Text(
+                                                    "Tidak",
+                                                    style: fontStyle1.copyWith(
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
+                                              ),
+                                              TextButton(
+                                                onPressed: () async {
+                                                  Map<String, dynamic>
+                                                      dataPresensi = {
+                                                    "isCheckIn": true,
+                                                  };
+
+                                                  await FirebaseFirestore
+                                                      .instance
+                                                      .collection("users")
+                                                      .doc(widget.user.uid)
+                                                      .collection(
+                                                          "list_presensi")
+                                                      .doc("$tglPresensi")
+                                                      .set(dataPresensi);
+
                                                   Navigator.pop(context);
                                                 },
                                                 child: Container(
