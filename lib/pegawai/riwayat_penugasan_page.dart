@@ -22,7 +22,9 @@ class _RiwayatPenugasanPageState extends State<RiwayatPenugasanPage> {
   bool isLoading = false;
 
   String tanggal = "Silahkan pilih tanggal";
+  String unitup = "";
   String nama = "";
+  String nomorTelp = "";
   String nomorWA = "";
   String id = "";
   String alamat = "";
@@ -65,6 +67,8 @@ class _RiwayatPenugasanPageState extends State<RiwayatPenugasanPage> {
         .then((value) {
       if (value.exists) {
         setState(() {
+          unitup = value.data()!["unitup"] ?? '';
+          nomorTelp = value.data()!["nomorTelp"] ?? '';
           nama = value.data()!['nama'] ?? '';
           nomorWA = value.data()!['nomorWA'] ?? '';
           id = value.data()!['id'] ?? '';
@@ -200,7 +204,9 @@ class _RiwayatPenugasanPageState extends State<RiwayatPenugasanPage> {
                 ),
                 child: Column(
                   children: [
+                    buildDataPelanggan(title: "Unitup", value: unitup),
                     buildDataPelanggan(title: "Nama", value: nama),
+                    buildDataPelanggan(title: "Nomor Telp", value: nomorTelp),
                     buildDataPelanggan(title: "Nomor WA", value: nomorWA),
                     buildDataPelanggan(title: "ID Pelanggan", value: id),
                     buildDataPelanggan(title: "Alamat", value: alamat),

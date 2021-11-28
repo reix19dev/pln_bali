@@ -3,6 +3,14 @@
 
   <!-- The INTERNET permission -->
   <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION"/>
+  <!--
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" /> 
+  -->   
 
   <!-- Provide required visibility configuration for API level 30 and above -->
   <queries>
@@ -23,6 +31,10 @@
    <application
         android:label="IDETECH"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyCfgzEKsT2qx1uUFjWcYe1TeaAy6vKaa-0"/>
+
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

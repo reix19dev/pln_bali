@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+// import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pln_bali/pegawai/home_pegawai_page.dart';
@@ -110,6 +111,31 @@ class _FormFotoLokasiPageState extends State<FormFotoLokasiPage> {
     print(pathFotoLokasi);
   }
 
+  // Future<Position> _getCurrentPosition() async {
+  //   bool serviceEnabled;
+  //   LocationPermission permission;
+
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if (!serviceEnabled) {
+  //     return Future.error('Location services are disabled.');
+  //   }
+
+  //   permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied) {
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission == LocationPermission.denied) {
+  //       return Future.error('Location permissions are denied');
+  //     }
+  //   }
+
+  //   if (permission == LocationPermission.deniedForever) {
+  //     return Future.error(
+  //         'Location permissions are permanently denied, we cannot request permissions.');
+  //   }
+
+  //   return await Geolocator.getCurrentPosition();
+  // }
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(
@@ -181,6 +207,16 @@ class _FormFotoLokasiPageState extends State<FormFotoLokasiPage> {
                             isUploadLoading = true;
                           });
 
+                          // Position position = await _getCurrentPosition();
+
+                          Map<String, dynamic> dataPelanggan =
+                              widget.dataPelanggan;
+
+                          // dataPelanggan.addAll({
+                          //   "koordinatX": position.latitude,
+                          //   "koordinatY": position.longitude,
+                          // });
+
                           DateTime today = DateTime.now();
                           String tglPresensi =
                               "${today.day}-${today.month}-${today.year}";
@@ -189,7 +225,7 @@ class _FormFotoLokasiPageState extends State<FormFotoLokasiPage> {
                               .doc(widget.user.uid)
                               .collection("list_presensi")
                               .doc("$tglPresensi")
-                              .update(widget.dataPelanggan);
+                              .update(dataPelanggan);
 
                           Navigator.pushAndRemoveUntil(
                             context,
@@ -372,7 +408,7 @@ class _FormFotoLokasiPageState extends State<FormFotoLokasiPage> {
                               ElevatedButton(
                                 onPressed: () async {
                                   await getFotoLokasiGalery();
-                                  
+
                                   setState(() {
                                     isAmbilFoto1 = false;
                                     isAmbilFoto2 = false;

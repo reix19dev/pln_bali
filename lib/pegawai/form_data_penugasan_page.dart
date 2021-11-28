@@ -35,6 +35,25 @@ class _FormDataPenugasanPageState extends State<FormDataPenugasanPage> {
   int jumlahTunggakan = 0;
   bool isCariLoading = false;
 
+  // snackBar Widget
+  tampilSnackBar(String? message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        backgroundColor: abuTua,
+        content: Text(
+          '$message',
+          style: fontStyle1,
+        ),
+        duration: Duration(milliseconds: 2000),
+        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(
@@ -586,7 +605,9 @@ class _FormDataPenugasanPageState extends State<FormDataPenugasanPage> {
               ),
               ElevatedButton(
                 onPressed: () async {
+                  String unitup = _unitupController.text;
                   String nama = _namaController.text;
+                  String nomorTelp = _nomorTelpController.text;
                   String nomorWA = _nomorWAController.text;
                   String id = _idController.text;
                   String alamat = _alamatController.text;
@@ -603,29 +624,35 @@ class _FormDataPenugasanPageState extends State<FormDataPenugasanPage> {
                           ? _biayaKeterlambatanController.text
                           : "0");
 
-                  Map<String, dynamic> dataPelanggan = {
-                    "nama": nama,
-                    "nomorWA": nomorWA,
-                    "id": id,
-                    "alamat": alamat,
-                    "nomorMeter": nomorMeter,
-                    "garduTiang": garduTiang,
-                    "taripDaya": taripDaya,
-                    "kodeKedudukan": kodeKedudukan,
-                    "biayaRekening": biayaRekening,
-                    "biayaKeterlambatan": biayaKeterlambatan,
-                    "jumlahTunggakan": jumlahTunggakan,
-                  };
-                  Navigator.push(
-                    context,
-                    PageTransition(
-                      child: FormFotoLokasiPage(
-                        user: widget.user,
-                        dataPelanggan: dataPelanggan,
+                  if (nomorWA.isEmpty) {
+                    tampilSnackBar("Nomor WA wajib diisi");
+                  } else {
+                    Map<String, dynamic> dataPelanggan = {
+                      "unitup": unitup,
+                      "nama": nama,
+                      "nomorTelp": nomorTelp,
+                      "nomorWA": nomorWA,
+                      "id": id,
+                      "alamat": alamat,
+                      "nomorMeter": nomorMeter,
+                      "garduTiang": garduTiang,
+                      "taripDaya": taripDaya,
+                      "kodeKedudukan": kodeKedudukan,
+                      "biayaRekening": biayaRekening,
+                      "biayaKeterlambatan": biayaKeterlambatan,
+                      "jumlahTunggakan": jumlahTunggakan,
+                    };
+                    Navigator.push(
+                      context,
+                      PageTransition(
+                        child: FormFotoLokasiPage(
+                          user: widget.user,
+                          dataPelanggan: dataPelanggan,
+                        ),
+                        type: PageTransitionType.rightToLeft,
                       ),
-                      type: PageTransitionType.rightToLeft,
-                    ),
-                  );
+                    );
+                  }
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
