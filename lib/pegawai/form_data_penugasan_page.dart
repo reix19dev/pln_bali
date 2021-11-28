@@ -108,25 +108,6 @@ class _FormDataPenugasanPageState extends State<FormDataPenugasanPage> {
                         .then((value) {
                       if (value.docs.first.exists) {
                         setState(() {
-                          //     "tarif": dataTest[i]["tarif"],
-                          //     "daya": dataTest[i]["daya"],
-                          //     "nomorHP": dataTest[i]["nomorHP"],
-                          //     "jenisLayanan": dataTest[i]["jenisLayanan"],
-                          //     "kodeKedudukan": dataTest[i]["kodeKedudukan"],
-                          //     "nomorMeter": dataTest[i]["nomorMeter"],
-                          //     "merkMeter": dataTest[i]["merkMeter"],
-                          //     "typeMeter": dataTest[i]["typeMeter"],
-                          //     "tahunBuatMeter": dataTest[i]["tahunBuatMeter"],
-                          //     "nomorGardu": dataTest[i]["nomorGardu"],
-                          //     "namaGardu": dataTest[i]["namaGardu"],
-                          //     "kapasitasTrafo": dataTest[i]["kapasitasTrafo"],
-                          //     "tegangan": dataTest[i]["tegangan"],
-                          //     "nomorMeterPrepaid": dataTest[i]["nomorMeterPrepaid"],
-                          //     "koordinatX":
-                          //         double.parse(dataTest[i]["koordinatX"].toString()),
-                          //     "koordinatY":
-                          //         double.parse(dataTest[i]["koordinatY"].toString()),
-                          //     "namaUP": dataTest[i]["namaUP"]
                           _unitupController.text =
                               value.docs.first.data()['unitup'] ?? '-';
                           _namaController.text =

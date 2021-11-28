@@ -1,15 +1,19 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pln_bali/pegawai/home_pegawai_page.dart';
 import 'package:pln_bali/pegawai/take_picture_page.dart';
 import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class FormFotoLokasiPage extends StatefulWidget {
   final User user;
@@ -33,6 +37,10 @@ class _FormFotoLokasiPageState extends State<FormFotoLokasiPage> {
   String urlFotoLokasi1 = '';
   String urlFotoLokasi2 = '';
   String urlFotoLokasi3 = '';
+
+  final ImagePicker _imagePicker = ImagePicker();
+  late File fotoLokasi;
+  late String pathFotoLokasi;
 
   @override
   void initState() {
@@ -85,6 +93,21 @@ class _FormFotoLokasiPageState extends State<FormFotoLokasiPage> {
     setState(() {
       isLoading = false;
     });
+  }
+
+  Future<void> getFotoLokasiGalery() async {
+    final image = await _imagePicker.pickImage(
+      source: ImageSource.gallery,
+    );
+
+    setState(() {
+      if (image != null) {
+        fotoLokasi = File(image.path);
+        pathFotoLokasi = image.path;
+      }
+    });
+    print("TESTING PATH GET FROM GALLERY");
+    print(pathFotoLokasi);
   }
 
   @override
@@ -347,7 +370,125 @@ class _FormFotoLokasiPageState extends State<FormFotoLokasiPage> {
                                 width: 8.w,
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () async {
+                                  await getFotoLokasiGalery();
+                                  
+                                  setState(() {
+                                    isAmbilFoto1 = false;
+                                    isAmbilFoto2 = false;
+                                    isAmbilFoto3 = false;
+                                  });
+
+                                  DateTime today = DateTime.now();
+                                  String tglPresensi =
+                                      "${today.day}-${today.month}-${today.year}";
+
+                                  final CollectionReference collectionUser =
+                                      FirebaseFirestore.instance
+                                          .collection("users");
+
+                                  if (idFoto == "foto_lokasi_1") {
+                                    print("TEST");
+                                    //upload ke firebase
+                                    final firebase_storage
+                                        .Reference storageRef = firebase_storage
+                                                .FirebaseStorage
+                                            .instanceFor(
+                                                bucket:
+                                                    'gs://pln-bali-c4058.appspot.com')
+                                        .ref()
+                                        .child("${widget.user.email}")
+                                        .child("foto_lokasi_1.png");
+
+                                    try {
+                                      print("Proses upload foto lokasi 1");
+
+                                      await storageRef.putData(
+                                          fotoLokasi.readAsBytesSync());
+
+                                      String urlDownload =
+                                          await storageRef.getDownloadURL();
+
+                                      await collectionUser
+                                          .doc(widget.user.uid)
+                                          .collection("list_presensi")
+                                          .doc(tglPresensi)
+                                          .update({
+                                        'urlFotoLokasi1': urlDownload,
+                                      }).then((value) async {
+                                        await getUrlFotoLokasi();
+                                      });
+                                    } catch (e) {
+                                      print(e);
+                                    }
+                                  } else if (idFoto == "foto_lokasi_2") {
+                                    //upload ke firebase
+                                    final firebase_storage
+                                        .Reference storageRef = firebase_storage
+                                                .FirebaseStorage
+                                            .instanceFor(
+                                                bucket:
+                                                    'gs://pln-bali-c4058.appspot.com')
+                                        .ref()
+                                        .child("${widget.user.email}")
+                                        .child("foto_lokasi_2.png");
+
+                                    try {
+                                      print("Proses upload foto lokasi 2");
+
+                                      await storageRef.putData(
+                                          fotoLokasi.readAsBytesSync());
+
+                                      String urlDownload =
+                                          await storageRef.getDownloadURL();
+
+                                      await collectionUser
+                                          .doc(widget.user.uid)
+                                          .collection("list_presensi")
+                                          .doc(tglPresensi)
+                                          .update({
+                                        'urlFotoLokasi2': urlDownload,
+                                      }).then((value) async {
+                                        await getUrlFotoLokasi();
+                                      });
+                                    } catch (e) {
+                                      print(e);
+                                    }
+                                  } else if (idFoto == "foto_lokasi_3") {
+                                    //upload ke firebase
+                                    final firebase_storage
+                                        .Reference storageRef = firebase_storage
+                                                .FirebaseStorage
+                                            .instanceFor(
+                                                bucket:
+                                                    'gs://pln-bali-c4058.appspot.com')
+                                        .ref()
+                                        .child("${widget.user.email}")
+                                        .child("foto_lokasi_3.png");
+
+                                    try {
+                                      print("Proses upload foto lokasi 3");
+
+                                      await storageRef.putData(
+                                          fotoLokasi.readAsBytesSync());
+
+                                      String urlDownload =
+                                          await storageRef.getDownloadURL();
+
+                                      await collectionUser
+                                          .doc(widget.user.uid)
+                                          .collection("list_presensi")
+                                          .doc(tglPresensi)
+                                          .update({
+                                        'urlFotoLokasi3': urlDownload,
+                                      }).then((value) async {
+                                        await getUrlFotoLokasi();
+                                      });
+                                    } catch (e) {
+                                      print(e);
+                                    }
+                                  }
+                                },
                                 style: OutlinedButton.styleFrom(
                                   backgroundColor: abuTua,
                                 ),

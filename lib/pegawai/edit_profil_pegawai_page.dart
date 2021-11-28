@@ -214,11 +214,10 @@ class _EditProfilPegawaiPageState extends State<EditProfilPegawaiPage> {
                           //upload ke firebase
                           final firebase_storage.Reference storageRef =
                               firebase_storage.FirebaseStorage.instanceFor(
-                                      bucket:
-                                          'gs://pln-bali-c4058.appspot.com')
+                                      bucket: 'gs://pln-bali-c4058.appspot.com')
                                   .ref()
                                   .child("$email")
-                                  .child("Foto Profil.png");
+                                  .child("foto_profil.png");
 
                           final CollectionReference collectionUser =
                               FirebaseFirestore.instance.collection("users");
@@ -234,6 +233,8 @@ class _EditProfilPegawaiPageState extends State<EditProfilPegawaiPage> {
 
                             await collectionUser.doc(widget.user.uid).update({
                               'urlFotoProfil': urlDownload,
+                            }).then((value) async {
+                              await getDataUser();
                             });
                           } catch (e) {
                             print(e);

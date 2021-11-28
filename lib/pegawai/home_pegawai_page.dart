@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:pln_bali/pegawai/data_pelanggan_page.dart';
 import 'package:pln_bali/pegawai/edit_profil_pegawai_page.dart';
 import 'package:pln_bali/pegawai/form_data_penugasan_page.dart';
 import 'package:pln_bali/pegawai/riwayat_penugasan_page.dart';
@@ -233,47 +234,47 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                 color: abuTua,
               ),
             ),
-            IconButton(
-              onPressed: () async {
-                // for (int i = 0; i < dataTest.length; i++) {
-                //   Map<String, dynamic> dataUser = {
-                //     "unitup": dataTest[i]["unitup"] ?? "-",
-                //     "idPelanggan": dataTest[i]["idPelanggan"] ?? "-",
-                //     "nama": dataTest[i]["nama"] ?? "-",
-                //     "namaPNJ": dataTest[i]["namaPNJ"] ?? "-",
-                //     "tarif": dataTest[i]["tarif"] ?? "-",
-                //     "daya": dataTest[i]["daya"] ?? "-",
-                //     "nomorTelp": dataTest[i]["nomorTelp"] ?? "-",
-                //     "nomorWA": dataTest[i]["nomorWA"] ?? "-",
-                //     "jenisLayanan": dataTest[i]["jenisLayanan"] ?? "-",
-                //     "kodeKedudukan": dataTest[i]["kodeKedudukan"] ?? "-",
-                //     "nomorMeter": dataTest[i]["nomorMeter"] ?? "-",
-                //     "merkMeter": dataTest[i]["merkMeter"] ?? "-",
-                //     "typeMeter": dataTest[i]["typeMeter"] ?? "-",
-                //     "tahunBuatMeter": dataTest[i]["tahunBuatMeter"] ?? "-",
-                //     "nomorGardu": dataTest[i]["nomorGardu"] ?? "-",
-                //     "namaGardu": dataTest[i]["namaGardu"] ?? "-",
-                //     "kapasitasTrafo": dataTest[i]["kapasitasTrafo"] ?? "-",
-                //     "tegangan": dataTest[i]["tegangan"] ?? "-",
-                //     "nomorMeterPrepaid":
-                //         dataTest[i]["nomorMeterPrepaid"] ?? "-",
-                //     "koordinatX": double.parse(
-                //         (dataTest[i]["koordinatX"] ?? "0").toString()),
-                //     "koordinatY": double.parse(
-                //         (dataTest[i]["koordinatY"] ?? "0").toString()),
-                //     "namaUP": dataTest[i]["namaUP"] ?? "-"
-                //   };
+            // IconButton(
+            //   onPressed: () async {
+            //     for (int i = 0; i < dataTest.length; i++) {
+            //       Map<String, dynamic> dataUser = {
+            //         "unitup": dataTest[i]["unitup"] ?? "-",
+            //         "idPelanggan": dataTest[i]["idPelanggan"] ?? "-",
+            //         "nama": dataTest[i]["nama"] ?? "-",
+            //         "namaPNJ": dataTest[i]["namaPNJ"] ?? "-",
+            //         "tarif": dataTest[i]["tarif"] ?? "-",
+            //         "daya": dataTest[i]["daya"] ?? "-",
+            //         "nomorTelp": dataTest[i]["nomorTelp"] ?? "-",
+            //         "nomorWA": dataTest[i]["nomorWA"] ?? "-",
+            //         "jenisLayanan": dataTest[i]["jenisLayanan"] ?? "-",
+            //         "kodeKedudukan": dataTest[i]["kodeKedudukan"] ?? "-",
+            //         "nomorMeter": dataTest[i]["nomorMeter"] ?? "-",
+            //         "merkMeter": dataTest[i]["merkMeter"] ?? "-",
+            //         "typeMeter": dataTest[i]["typeMeter"] ?? "-",
+            //         "tahunBuatMeter": dataTest[i]["tahunBuatMeter"] ?? "-",
+            //         "nomorGardu": dataTest[i]["nomorGardu"] ?? "-",
+            //         "namaGardu": dataTest[i]["namaGardu"] ?? "-",
+            //         "kapasitasTrafo": dataTest[i]["kapasitasTrafo"] ?? "-",
+            //         "tegangan": dataTest[i]["tegangan"] ?? "-",
+            //         "nomorMeterPrepaid":
+            //             dataTest[i]["nomorMeterPrepaid"] ?? "-",
+            //         "koordinatX": double.parse(
+            //             (dataTest[i]["koordinatX"] ?? "0").toString()),
+            //         "koordinatY": double.parse(
+            //             (dataTest[i]["koordinatY"] ?? "0").toString()),
+            //         "namaUP": dataTest[i]["namaUP"] ?? "-"
+            //       };
 
-                //   await FirebaseFirestore.instance
-                //       .collection("pelanggan")
-                //       .add(dataUser);
-                // }
-              },
-              icon: Icon(
-                FontAwesomeIcons.book,
-                color: abuTua,
-              ),
-            )
+            //       await FirebaseFirestore.instance
+            //           .collection("pelanggan")
+            //           .add(dataUser);
+            //     }
+            //   },
+            //   icon: Icon(
+            //     FontAwesomeIcons.book,
+            //     color: abuTua,
+            //   ),
+            // )
           ],
           title: Row(
             children: [
@@ -496,9 +497,17 @@ class _HomePegawaiPageState extends State<HomePegawaiPage> {
                                       );
                                     }),
                                 menuItemWidget(
-                                  namaMenu: "Data Pelanggan",
-                                  iconData: FontAwesomeIcons.addressBook,
-                                ),
+                                    namaMenu: "Data Pelanggan",
+                                    iconData: FontAwesomeIcons.addressBook,
+                                    onPressed: () {
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                            child: DataPelangganPage(),
+                                            type:
+                                                PageTransitionType.rightToLeft,
+                                          ));
+                                    }),
                               ],
                             ),
                           ),
