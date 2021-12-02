@@ -14,14 +14,10 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _namaController =
-      TextEditingController(text: "Ramadhan Pratama");
-  TextEditingController _emailController =
-      TextEditingController(text: "tama110199@gmail.com");
-  TextEditingController _passwordController =
-      TextEditingController(text: "110199");
-  TextEditingController _valPasswordController =
-      TextEditingController(text: "110199");
+  TextEditingController _namaController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _valPasswordController = TextEditingController();
 
   bool isVisiblePass = false;
   bool isLoginPage = true;
