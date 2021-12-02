@@ -207,19 +207,25 @@ class _FormFotoLokasiPageState extends State<FormFotoLokasiPage> {
                             isUploadLoading = true;
                           });
 
+                          DateTime today = DateTime.now();
+                          String tglPresensi =
+                              "${today.day}-${today.month}-${today.year}";
+
                           // Position position = await _getCurrentPosition();
 
                           Map<String, dynamic> dataPelanggan =
                               widget.dataPelanggan;
+
+                          dataPelanggan.addAll({
+                            "bulanKerja": today.month,
+                          });
 
                           // dataPelanggan.addAll({
                           //   "koordinatX": position.latitude,
                           //   "koordinatY": position.longitude,
                           // });
 
-                          DateTime today = DateTime.now();
-                          String tglPresensi =
-                              "${today.day}-${today.month}-${today.year}";
+                          
                           await FirebaseFirestore.instance
                               .collection("users")
                               .doc(widget.user.uid)

@@ -5,12 +5,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:pln_bali/pengawas/data_penugasan_pegawai_page.dart';
+import 'package:pln_bali/pengawas/data_statistik_page.dart';
 import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 
 class StatistikPenugasanPage extends StatefulWidget {
   final User user;
-  const StatistikPenugasanPage({Key? key, required this.user}) : super(key: key);
+  const StatistikPenugasanPage({Key? key, required this.user})
+      : super(key: key);
 
   @override
   _StatistikPenugasanPageState createState() => _StatistikPenugasanPageState();
@@ -85,7 +87,7 @@ class _StatistikPenugasanPageState extends State<StatistikPenugasanPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              data['nama'],
+                              data['nama'] ?? "Belum Diisi",
                               style: fontStyle2.copyWith(
                                   color: abuTua, fontSize: 16.sp),
                             ),
@@ -93,14 +95,14 @@ class _StatistikPenugasanPageState extends State<StatistikPenugasanPage> {
                               height: 4.h,
                             ),
                             Text(
-                              data['nomorHP'],
+                              data['nomorHP'] ?? "Belum Diisi",
                               style: fontStyle2.copyWith(color: abuMuda),
                             ),
                           ],
                         ),
                         InkWell(
                           child: Icon(
-                            FontAwesomeIcons.fileAlt,
+                            FontAwesomeIcons.chartPie,
                             color: abuTua,
                             size: 24.sp,
                           ),
@@ -108,7 +110,8 @@ class _StatistikPenugasanPageState extends State<StatistikPenugasanPage> {
                             Navigator.push(
                               context,
                               PageTransition(
-                                child: DataPenugasanPegawaiPage(
+                                child: DataStatistikPage(
+                                  namaPegawai: data['nama'],
                                   uidPegawai: document.id,
                                 ),
                                 type: PageTransitionType.rightToLeft,
