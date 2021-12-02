@@ -11,6 +11,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:pln_bali/pengawas/edit_profil_koordinator_page.dart';
 import 'package:pln_bali/pengawas/list_pegawai_page.dart';
 import 'package:pln_bali/pengawas/monitoring_pegawai_page.dart';
+import 'package:pln_bali/pengawas/statistik_penugasan_page.dart';
 import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 import 'package:shimmer/shimmer.dart';
@@ -276,7 +277,7 @@ class _HomeKoordinatorPageState extends State<HomeKoordinatorPage> {
                             child: Row(
                               children: [
                                 menuItemWidget(
-                                    namaMenu: "Monitoring Penugasan",
+                                    namaMenu: "Monitoring \nPenugasan",
                                     iconData: FontAwesomeIcons.tv,
                                     onPressed: () {
                                       Navigator.push(
@@ -289,18 +290,33 @@ class _HomeKoordinatorPageState extends State<HomeKoordinatorPage> {
                                                   .rightToLeft));
                                     }),
                                 menuItemWidget(
-                                    namaMenu: "List Pegawai",
-                                    iconData: FontAwesomeIcons.list,
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          PageTransition(
-                                              child: ListPegawaiPage(
-                                                user: widget.user,
-                                              ),
-                                              type: PageTransitionType
-                                                  .rightToLeft));
-                                    }),
+                                  namaMenu: "List \nPegawai",
+                                  iconData: FontAwesomeIcons.list,
+                                  onPressed: () {
+                                    Navigator.push(
+                                        context,
+                                        PageTransition(
+                                            child: ListPegawaiPage(
+                                              user: widget.user,
+                                            ),
+                                            type: PageTransitionType
+                                                .rightToLeft));
+                                  },
+                                ),
+                                menuItemWidget(
+                                  namaMenu: "Statistik \nPenugasan",
+                                  iconData: FontAwesomeIcons.chartBar,
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      PageTransition(
+                                          child: StatistikPenugasanPage(
+                                            user: widget.user,
+                                          ),
+                                          type: PageTransitionType.rightToLeft),
+                                    );
+                                  },
+                                ),
                               ],
                             ),
                           ),

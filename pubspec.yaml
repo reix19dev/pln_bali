@@ -50,6 +50,7 @@ dependencies:
   image_picker: ^0.8.4+1
   google_maps_flutter: ^2.0.9
   # geolocator: ^7.7.1
+  pie_chart: ^5.1.0
 
 dev_dependencies:
   flutter_test:

@@ -125,6 +125,7 @@ class _ListPegawaiPageState extends State<ListPegawaiPage> {
                       Map<String, dynamic> data =
                           document.data()! as Map<String, dynamic>;
                       return Container(
+                        margin: EdgeInsets.only(bottom: 8),
                         padding: EdgeInsets.all(12),
                         decoration: BoxDecoration(
                             border: Border.all(
@@ -136,7 +137,7 @@ class _ListPegawaiPageState extends State<ListPegawaiPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              data['nama'],
+                              data['nama'] ?? "Belum Diisi",
                               style: fontStyle2.copyWith(
                                   color: abuTua, fontSize: 16.sp),
                             ),
@@ -144,7 +145,7 @@ class _ListPegawaiPageState extends State<ListPegawaiPage> {
                               height: 4.h,
                             ),
                             Text(
-                              data['nomorHP'],
+                              data['nomorHP'] ?? "Belum Diisi",
                               style: fontStyle2.copyWith(color: abuMuda),
                             ),
                           ],
@@ -175,6 +176,7 @@ class _ListPegawaiPageState extends State<ListPegawaiPage> {
                       Map<String, dynamic> data =
                           document.data()! as Map<String, dynamic>;
                       return Container(
+                        margin: EdgeInsets.only(bottom: 8),
                         padding: EdgeInsets.all(12),
                         decoration: BoxDecoration(
                             border: Border.all(
@@ -189,7 +191,7 @@ class _ListPegawaiPageState extends State<ListPegawaiPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  data['nama'],
+                                  data['nama'] ?? "Belum Diisi",
                                   style: fontStyle2.copyWith(
                                       color: abuTua, fontSize: 16.sp),
                                 ),
@@ -197,7 +199,7 @@ class _ListPegawaiPageState extends State<ListPegawaiPage> {
                                   height: 4.h,
                                 ),
                                 Text(
-                                  data['nomorHP'],
+                                  data['nomorHP'] ?? "Belum Diisi",
                                   style: fontStyle2.copyWith(color: abuMuda),
                                 ),
                               ],
