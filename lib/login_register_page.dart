@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:page_transition/page_transition.dart';
+import 'package:pln_bali/lupa_password.dart';
 import 'package:pln_bali/utils/colors.dart';
 import 'package:pln_bali/utils/font_styles.dart';
 
@@ -189,7 +191,30 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(
-              height: 16.h,
+              height: 8.h,
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: InkWell(
+                child: Text(
+                  "Lupa Password",
+                  style: fontStyle2.copyWith(
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                        child: LupaPassword(),
+                        type: PageTransitionType.rightToLeft,
+                      ));
+                },
+              ),
+            ),
+            SizedBox(
+              height: 32.h,
             ),
             ElevatedButton(
               onPressed: () async {
@@ -197,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
                 String password = _passwordController.text.trim();
 
                 if (email.isEmpty) {
-                  tampilSnackBar('Nomor HP masih kosong. Silahkan input.');
+                  tampilSnackBar('Email masih kosong. Silahkan input.');
                 } else if (password.isEmpty) {
                   tampilSnackBar('Password masih kosong. Silahkan input.');
                 } else {
@@ -536,7 +561,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(
-              height: 16.h,
+              height: 32.h,
             ),
             ElevatedButton(
               onPressed: () async {
@@ -546,7 +571,7 @@ class _LoginPageState extends State<LoginPage> {
                 String valPassword = _valPasswordController.text.trim();
 
                 if (email.isEmpty) {
-                  tampilSnackBar('Nomor HP masih kosong. Silahkan input.');
+                  tampilSnackBar('Email masih kosong. Silahkan input.');
                 } else if (password.isEmpty) {
                   tampilSnackBar('Password masih kosong. Silahkan input.');
                 } else if (valPassword.isEmpty) {
